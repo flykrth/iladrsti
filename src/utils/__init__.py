@@ -21,5 +21,17 @@ __all__ = [
     "DiceLoss",
     "BCEDiceLoss",
     "get_loss",
+    "run_evaluation_suite",
+    "MODEL_SPECS",
 ]
+
+
+def __getattr__(name: str):
+    if name in ("run_evaluation_suite", "MODEL_SPECS"):
+        from src.utils.evaluation_suite import MODEL_SPECS as _SPECS
+        from src.utils.evaluation_suite import run_evaluation_suite as _run
+        if name == "run_evaluation_suite":
+            return _run
+        return _SPECS
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 

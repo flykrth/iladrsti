@@ -1,0 +1,45 @@
+{
+  "seed": 42,
+  "threshold": 0.5,
+  "models": [
+    {
+      "id": "model_1",
+      "name": "Model 1: Baseline BCE (RGB)",
+      "in_channels": 3,
+      "loss_name": "bce",
+      "loss_label": "BCEWithLogitsLoss",
+      "checkpoint": "checkpoints/baseline_bce_rgb.pt",
+      "evaluated": true,
+      "test_dice": 0.7070711255073547,
+      "test_iou": 0.6297157526016235,
+      "test_loss": 0.420272159576416,
+      "test_samples": 40
+    },
+    {
+      "id": "model_2",
+      "name": "Model 2: Focal-Tversky (RGB)",
+      "in_channels": 3,
+      "loss_name": "focal_tversky",
+      "loss_label": "Focal-Tversky Loss",
+      "checkpoint": "checkpoints/ablation_rgb_3band.pt",
+      "evaluated": true,
+      "test_dice": 0.5026851058006286,
+      "test_iou": 0.42454607486724855,
+      "test_loss": 0.5154056936502457,
+      "test_samples": 40
+    },
+    {
+      "id": "model_3",
+      "name": "Model 3: Focal-Tversky (RGB + NIR)",
+      "in_channels": 4,
+      "loss_name": "focal_tversky",
+      "loss_label": "Focal-Tversky Loss",
+      "checkpoint": "checkpoints/ablation_rgbnir_4band.pt",
+      "evaluated": true,
+      "test_dice": 0.5795817494392395,
+      "test_iou": 0.5012855529785156,
+      "test_loss": 0.5101685941219329,
+      "test_samples": 40
+    }
+  ]
+}

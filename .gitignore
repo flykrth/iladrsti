@@ -14,6 +14,7 @@ __pycache__/
 .DS_Store
 .vscode/
 .idea/
+*.bak
 
 # Large Checkpoints (Hosted on GitHub Releases)
 # The full 503MB checkpoint with optimizer states is hosted on GitHub Releases v1.0.0-baseline
