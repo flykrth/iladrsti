@@ -1,0 +1,9 @@
+torch>=2.0.0
+torchvision
+rasterio
+albumentations
+segmentation-models-pytorch
+tqdm
+pyyaml
+matplotlib
+numpy

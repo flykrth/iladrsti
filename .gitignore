@@ -1,0 +1,27 @@
+# Environments and Virtualenvs
+venv/
+.venv/
+env/
+ENV/
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# System and IDE
+.DS_Store
+.vscode/
+.idea/
+
+# Large Checkpoints (Hosted on GitHub Releases)
+# The full 503MB checkpoint with optimizer states is hosted on GitHub Releases v1.0.0-baseline
+checkpoints/best_baseline_model.pt
+
+# Raw duplicate un-split data (Split data in data/train, data/val, data/test is preserved)
+data/raw/
+data/processed/
+
+# Logs
+*.log

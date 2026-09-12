@@ -1,0 +1,9 @@
+{
+  "checkpoint": "checkpoints/best_baseline_model_fp16.pt",
+  "in_channels": 4,
+  "test_samples": 40,
+  "threshold": 0.5,
+  "test_loss": 0.3781237483024597,
+  "test_dice": 0.7834155797958374,
+  "test_iou": 0.7044492602348328
+}

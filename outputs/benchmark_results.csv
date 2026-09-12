@@ -1,0 +1,2 @@
+experiment_name,architecture,backbone,in_channels,loss_function,val_dice,val_iou,test_loss,test_dice,test_iou,seed,notes
+Mandatory Baseline,Standard U-Net,ResNet-50 (Pretrained),4,BCEWithLogitsLoss,0.6924,0.61,0.3781,0.7834,0.7044,42,Mandatory comparison floor (Seed locked 42)
