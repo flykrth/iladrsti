@@ -3,790 +3,2149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ilādṛṣṭi (इलादृष्टि) — Multispectral Wildfire Semantic Segmentation Dashboard</title>
-  <meta name="description" content="Earth Observation Deep Learning Dashboard for Autonomous Multispectral Wildfire Detection & Burned Area Delineation using Sentinel-2 L2A Satellite Imagery." />
+  <title>ILĀDṚṢṬI // Multispectral Wildfire Semantic Segmentation SOC</title>
+  <style>
+    /* -------------------------------------------------------------------------
+       ILĀDṚṢṬI (इलादृष्टि) — CYBERSECURITY / SOC MISSION TELEMETRY DASHBOARD
+       Design System: Deep Dark Mode, High-Tech Neon + Traditional Indian Hues
+       Colors: Cyan (#00f3ff), Purple (#a855f7), Saffron (#ff9933),
+               Terracotta (#e04b2b), Temple Gold (#d4af37), Carbon (#07090e)
+       Zero External Assets: Standalone CSS, Pure Inline SVG, Vanilla JS
+       Zero Emojis: Strictly Technical SVG Symbols & Monospaced Typography
+       ------------------------------------------------------------------------- */
 
-  <!-- Fonts & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+    :root {
+      --bg-base: #07090e;
+      --bg-panel: #0d111a;
+      --bg-panel-elevated: #121824;
+      --bg-panel-translucent: rgba(13, 17, 26, 0.88);
+      --border-subtle: #1a2333;
+      --border-active: #2a3b57;
+      --border-glow: rgba(0, 243, 255, 0.35);
 
-  <!-- KaTeX for crisp mathematical formulas -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
-  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+      --neon-cyan: #00f3ff;
+      --neon-cyan-glow: rgba(0, 243, 255, 0.25);
+      --neon-purple: #a855f7;
+      --neon-purple-glow: rgba(168, 85, 247, 0.25);
 
-  <!-- Chart.js for responsive benchmark and training visualizations -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      --indian-saffron: #ff8800;
+      --indian-saffron-bright: #ffaa33;
+      --indian-saffron-glow: rgba(255, 136, 0, 0.3);
+      --indian-terracotta: #e04b2b;
+      --indian-terracotta-glow: rgba(224, 75, 43, 0.3);
+      --indian-gold: #d4af37;
+      --indian-gold-muted: #997f26;
 
-  <!-- Custom Stylesheets -->
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/components.css" />
+      --status-online: #00ffaa;
+      --status-warning: #ffaa00;
+      --status-critical: #ff3355;
+
+      --text-main: #e6edf8;
+      --text-muted: #8b9bb4;
+      --text-dim: #4d5c73;
+
+      --font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Roboto Mono', Menlo, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      line-height: 1.4;
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(0, 243, 255, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 85% 20%, rgba(255, 136, 0, 0.03) 0%, transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(168, 85, 247, 0.02) 0%, transparent 50%),
+        linear-gradient(rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 32px 32px, 32px 32px;
+      background-attachment: fixed;
+    }
+
+    /* Scanline effect for SOC aesthetic */
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0.15) 0px,
+        rgba(0, 0, 0, 0.15) 1px,
+        transparent 1px,
+        transparent 2px
+      );
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* -------------------------------------------------------------------------
+       TYPOGRAPHY & ACCENTS
+       ------------------------------------------------------------------------- */
+    .mono {
+      font-family: var(--font-mono);
+    }
+    .text-cyan { color: var(--neon-cyan); }
+    .text-purple { color: var(--neon-purple); }
+    .text-saffron { color: var(--indian-saffron); }
+    .text-terracotta { color: var(--indian-terracotta); }
+    .text-gold { color: var(--indian-gold); }
+    .text-online { color: var(--status-online); }
+    .text-dim { color: var(--text-dim); }
+    .text-muted { color: var(--text-muted); }
+
+    /* -------------------------------------------------------------------------
+       TOP NAVIGATION & SOC HEADER
+       ------------------------------------------------------------------------- */
+    .soc-header {
+      background: var(--bg-panel-translucent);
+      border-bottom: 1px solid var(--border-subtle);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .brand-cluster {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .mandala-badge {
+      width: 38px;
+      height: 38px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .mandala-badge svg {
+      width: 100%;
+      height: 100%;
+      animation: slow-rotate 40s linear infinite;
+      filter: drop-shadow(0 0 6px rgba(212, 175, 55, 0.4));
+    }
+
+    @keyframes slow-rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .brand-title-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .brand-title-row {
+      display: flex;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .brand-title {
+      font-family: var(--font-mono);
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fff;
+      text-transform: uppercase;
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.4);
+    }
+
+    .brand-sanskrit {
+      font-size: 13px;
+      color: var(--indian-gold);
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+
+    .brand-sub {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-muted);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+    }
+
+    .header-track-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 136, 0, 0.08);
+      border: 1px solid rgba(255, 136, 0, 0.3);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--indian-saffron-bright);
+      letter-spacing: 0.5px;
+    }
+
+    .telemetry-tape {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 5px 14px;
+      border-radius: 4px;
+      border: 1px solid rgba(26, 35, 51, 0.7);
+    }
+
+    .tele-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background-color: var(--status-online);
+      box-shadow: 0 0 8px var(--status-online);
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
+
+    .seed-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 6px var(--neon-cyan);
+      clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-cyber {
+      background: rgba(0, 243, 255, 0.06);
+      border: 1px solid rgba(0, 243, 255, 0.3);
+      color: var(--neon-cyan);
+      padding: 5px 10px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .btn-cyber:hover {
+      background: rgba(0, 243, 255, 0.16);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    }
+
+    /* -------------------------------------------------------------------------
+       MAIN SOC GRID LAYOUT
+       ------------------------------------------------------------------------- */
+    .soc-layout {
+      flex: 1;
+      padding: 12px;
+      display: grid;
+      grid-template-columns: 310px 1fr 340px;
+      grid-template-rows: minmax(460px, auto) auto;
+      gap: 12px;
+      max-width: 1920px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* -------------------------------------------------------------------------
+       MODULAR SOC CARDS & MANDALA INTEGRATION
+       ------------------------------------------------------------------------- */
+    .soc-card {
+      background: var(--bg-panel);
+      border: 1px solid var(--border-subtle);
+      border-radius: 6px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .soc-card:hover {
+      border-color: var(--border-active);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 243, 255, 0.05);
+    }
+
+    /* Subtle Indian Mandala Background Watermark */
+    .mandala-watermark {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.045;
+      z-index: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    .mandala-watermark.top-right {
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+    }
+
+    .mandala-watermark.center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px;
+      height: 320px;
+    }
+
+    .mandala-watermark.bottom-left {
+      bottom: -60px;
+      left: -60px;
+      width: 220px;
+      height: 220px;
+    }
+
+    .soc-card:hover .mandala-watermark {
+      opacity: 0.075;
+    }
+
+    /* Cultural Geometric Corner Flourishes */
+    .corner-flourish {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-flourish.tl { top: 0; left: 0; border-top: 2px solid var(--indian-gold); border-left: 2px solid var(--indian-gold); }
+    .corner-flourish.tr { top: 0; right: 0; border-top: 2px solid var(--neon-cyan); border-right: 2px solid var(--neon-cyan); }
+    .corner-flourish.bl { bottom: 0; left: 0; border-bottom: 2px solid var(--neon-cyan); border-left: 2px solid var(--neon-cyan); }
+    .corner-flourish.br { bottom: 0; right: 0; border-bottom: 2px solid var(--indian-saffron); border-right: 2px solid var(--indian-saffron); }
+
+    .card-header {
+      padding: 10px 14px;
+      background: rgba(18, 24, 36, 0.7);
+      border-bottom: 1px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: relative;
+      z-index: 3;
+    }
+
+    .card-title-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-icon-svg {
+      width: 15px;
+      height: 15px;
+      flex-shrink: 0;
+    }
+
+    .card-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #fff;
+    }
+
+    .card-badge {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-cyan { background: rgba(0, 243, 255, 0.1); border: 1px solid rgba(0, 243, 255, 0.3); color: var(--neon-cyan); }
+    .badge-saffron { background: rgba(255, 136, 0, 0.1); border: 1px solid rgba(255, 136, 0, 0.3); color: var(--indian-saffron-bright); }
+    .badge-purple { background: rgba(168, 85, 247, 0.1); border: 1px solid rgba(168, 85, 247, 0.3); color: var(--neon-purple); }
+
+    .card-body {
+      padding: 12px;
+      position: relative;
+      z-index: 3;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* -------------------------------------------------------------------------
+       MODULE 2: LEFT SIDEBAR - INFERENCE FLOW TIMELINE (VERTICAL STEPPER)
+       ------------------------------------------------------------------------- */
+    .timeline-sidebar {
+      grid-column: 1 / 2;
+      grid-row: 1 / 3;
+    }
+
+    .stepper-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+      padding-left: 8px;
+    }
+
+    .stepper-container::before {
+      content: "";
+      position: absolute;
+      top: 14px;
+      bottom: 24px;
+      left: 19px;
+      width: 2px;
+      background: linear-gradient(
+        180deg,
+        var(--neon-cyan) 0%,
+        var(--neon-purple) 50%,
+        var(--indian-saffron) 100%
+      );
+      opacity: 0.4;
+      z-index: 1;
+    }
+
+    .stepper-step {
+      display: flex;
+      gap: 12px;
+      position: relative;
+      z-index: 2;
+      background: rgba(18, 24, 36, 0.5);
+      border: 1px solid rgba(26, 35, 51, 0.6);
+      border-radius: 5px;
+      padding: 8px 10px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .stepper-step:hover, .stepper-step.active {
+      background: rgba(18, 24, 36, 0.95);
+      border-color: rgba(0, 243, 255, 0.4);
+      transform: translateX(2px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .stepper-step.active {
+      border-left: 3px solid var(--neon-cyan);
+    }
+
+    .step-indicator {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      background: var(--bg-panel-elevated);
+      border: 1px solid var(--border-active);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+
+    .stepper-step.active .step-indicator {
+      background: var(--neon-cyan);
+      color: #000;
+      box-shadow: 0 0 10px var(--neon-cyan);
+      border-color: var(--neon-cyan);
+    }
+
+    .step-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      margin-bottom: 3px;
+    }
+
+    .step-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 600;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .step-time {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--neon-cyan);
+    }
+
+    .step-desc {
+      font-size: 10.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+      margin-bottom: 4px;
+    }
+
+    .step-tensor {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: var(--indian-gold);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+    }
+
+    .step-telemetry-box {
+      margin-top: 10px;
+      background: rgba(0, 0, 0, 0.45);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 8px;
+    }
+
+    .telemetry-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      padding: 2px 0;
+      border-bottom: 1px dotted rgba(255, 255, 255, 0.05);
+    }
+    .telemetry-row:last-child {
+      border-bottom: none;
+    }
+
+    /* -------------------------------------------------------------------------
+       MODULE 3: CENTER STAGE - INTERACTIVE VISUAL DEMO
+       ------------------------------------------------------------------------- */
+    .center-stage {
+      grid-column: 2 / 3;
+      grid-row: 1 / 3;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .imagery-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+
+    .spectral-bands {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .band-btn {
+      background: rgba(18, 24, 36, 0.8);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      padding: 4px 8px;
+      border-radius: 3px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .band-btn:hover {
+      color: #fff;
+      border-color: var(--border-active);
+    }
+
+    .band-btn.active {
+      background: rgba(0, 243, 255, 0.12);
+      border-color: var(--neon-cyan);
+      color: var(--neon-cyan);
+      font-weight: 600;
+      box-shadow: 0 0 8px rgba(0, 243, 255, 0.2);
+    }
+
+    .imagery-viewport-wrapper {
+      position: relative;
+      flex: 1;
+      min-height: 480px;
+      background: #05070a;
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* The Before / After Split Slider Container */
+    .split-slider-stage {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    .layer-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* AI Prediction Overlay with dynamic clip-path */
+    .layer-after-wrap {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      clip-path: polygon(0 0, 50% 0, 50% 100%, 0 100%);
+      transition: clip-path 0.04s ease-out;
+    }
+
+    /* Slider Divider Bar */
+    .slider-divider {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 2px;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 12px var(--neon-cyan), 0 0 2px #fff;
+      transform: translateX(-50%);
+      cursor: ew-resize;
+      z-index: 20;
+      pointer-events: auto;
+    }
+
+    .slider-handle {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--bg-panel-elevated);
+      border: 2px solid var(--neon-cyan);
+      box-shadow: 0 0 15px var(--neon-cyan), inset 0 0 6px var(--indian-saffron);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: ew-resize;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .slider-handle:hover {
+      transform: translate(-50%, -50%) scale(1.12);
+      box-shadow: 0 0 20px var(--neon-cyan), inset 0 0 8px var(--indian-saffron);
+    }
+
+    .slider-handle svg {
+      width: 14px;
+      height: 14px;
+      fill: var(--neon-cyan);
+    }
+
+    /* Floating Viewport Overlays */
+    .hud-overlay {
+      position: absolute;
+      pointer-events: none;
+      z-index: 15;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+    }
+
+    .hud-top-left {
+      top: 10px;
+      left: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      background: rgba(7, 9, 14, 0.75);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      border-radius: 3px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hud-top-right {
+      top: 10px;
+      right: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 3px;
+      background: rgba(7, 9, 14, 0.75);
+      border: 1px solid var(--border-subtle);
+      padding: 6px 10px;
+      border-radius: 3px;
+      backdrop-filter: blur(4px);
+    }
+
+    .hud-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 9px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .hud-bottom-bar {
+      position: absolute;
+      bottom: 8px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(7, 9, 14, 0.85);
+      border: 1px solid var(--border-subtle);
+      padding: 5px 12px;
+      border-radius: 3px;
+      z-index: 15;
+    }
+
+    .crosshair-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background-image: 
+        linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+      background-size: 80px 80px;
+      z-index: 10;
+    }
+
+    /* Map Hotspot Bounding Boxes */
+    .fire-tag {
+      position: absolute;
+      background: rgba(224, 75, 43, 0.2);
+      border: 1px dashed var(--indian-terracotta);
+      border-radius: 2px;
+      pointer-events: none;
+      z-index: 12;
+      animation: pulse-fire 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-fire {
+      0%, 100% { border-color: var(--indian-terracotta); box-shadow: 0 0 6px rgba(224, 75, 43, 0.4); }
+      50% { border-color: var(--indian-saffron-bright); box-shadow: 0 0 14px rgba(255, 170, 51, 0.7); }
+    }
+
+    .fire-label {
+      position: absolute;
+      top: -16px;
+      left: 0;
+      background: var(--indian-terracotta);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 2px;
+      white-space: nowrap;
+      letter-spacing: 0.5px;
+    }
+
+    /* -------------------------------------------------------------------------
+       MODULE 4: TOP RIGHT - PERFORMANCE GAUGES (DONUT/GAUGE CHARTS)
+       ------------------------------------------------------------------------- */
+    .metrics-card {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+    }
+
+    .gauges-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .gauge-card {
+      background: rgba(18, 24, 36, 0.6);
+      border: 1px solid var(--border-subtle);
+      border-radius: 5px;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+    }
+
+    .gauge-svg-wrap {
+      width: 110px;
+      height: 70px;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .gauge-svg-wrap svg {
+      width: 110px;
+      height: 70px;
+      overflow: visible;
+    }
+
+    .gauge-value-center {
+      position: absolute;
+      bottom: 2px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-mono);
+      font-size: 16px;
+      font-weight: 800;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .gauge-metric-title {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-top: 4px;
+      text-align: center;
+      letter-spacing: 0.5px;
+    }
+
+    .gauge-target {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      color: var(--status-online);
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    /* Stat Blocks Grid */
+    .stat-blocks-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .stat-block {
+      background: rgba(18, 24, 36, 0.5);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .stat-label {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-val-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .stat-val {
+      font-family: var(--font-mono);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .stat-delta {
+      font-family: var(--font-mono);
+      font-size: 8.5px;
+      font-weight: 600;
+    }
+
+    /* -------------------------------------------------------------------------
+       MODULE 5: BOTTOM RIGHT - ABLATION & ANALYTICS
+       ------------------------------------------------------------------------- */
+    .analytics-card {
+      grid-column: 3 / 4;
+      grid-row: 2 / 3;
+    }
+
+    .chart-section {
+      margin-bottom: 12px;
+    }
+
+    .sub-section-title {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--indian-gold);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .sub-section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--border-subtle);
+    }
+
+    /* Horizontal Bar Chart Styles */
+    .bar-chart-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .bar-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .bar-label-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9px;
+    }
+
+    .bar-name {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .bar-metrics-val {
+      color: var(--text-muted);
+    }
+
+    .bar-track {
+      height: 7px;
+      background: rgba(26, 35, 51, 0.6);
+      border-radius: 2px;
+      overflow: hidden;
+      display: flex;
+      position: relative;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 2px;
+      position: relative;
+      transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .bar-fill.bce {
+      background: linear-gradient(90deg, #4d5c73, #7a8fa9);
+    }
+
+    .bar-fill.bce-nir {
+      background: linear-gradient(90deg, #1f6b80, var(--neon-cyan));
+    }
+
+    .bar-fill.dice {
+      background: linear-gradient(90deg, #5b21b6, var(--neon-purple));
+    }
+
+    .bar-fill.ftl-winner {
+      background: linear-gradient(90deg, var(--indian-terracotta), var(--indian-saffron), var(--neon-cyan));
+      box-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+    }
+
+    /* AI Insights & Limitations Styled List */
+    .insights-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 165px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .insights-list::-webkit-scrollbar {
+      width: 4px;
+    }
+    .insights-list::-webkit-scrollbar-thumb {
+      background: var(--border-active);
+      border-radius: 2px;
+    }
+
+    .insight-item {
+      background: rgba(18, 24, 36, 0.55);
+      border: 1px solid var(--border-subtle);
+      border-radius: 4px;
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      border-left: 3px solid var(--border-active);
+      transition: all 0.15s ease;
+    }
+
+    .insight-item:hover {
+      background: rgba(18, 24, 36, 0.9);
+      border-color: var(--border-active);
+    }
+
+    .insight-item.critical { border-left-color: var(--status-critical); }
+    .insight-item.moderate { border-left-color: var(--status-warning); }
+    .insight-item.low { border-left-color: var(--neon-cyan); }
+    .insight-item.mitigated { border-left-color: var(--status-online); }
+
+    .insight-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+
+    .insight-title {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .severity-tag {
+      font-family: var(--font-mono);
+      font-size: 7.5px;
+      font-weight: 700;
+      padding: 1px 4px;
+      border-radius: 2px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .severity-tag.critical { background: rgba(255, 51, 85, 0.15); color: var(--status-critical); border: 1px solid rgba(255, 51, 85, 0.3); }
+    .severity-tag.moderate { background: rgba(255, 170, 0, 0.15); color: var(--status-warning); border: 1px solid rgba(255, 170, 0, 0.3); }
+    .severity-tag.low { background: rgba(0, 243, 255, 0.15); color: var(--neon-cyan); border: 1px solid rgba(0, 243, 255, 0.3); }
+    .severity-tag.mitigated { background: rgba(0, 255, 170, 0.15); color: var(--status-online); border: 1px solid rgba(0, 255, 170, 0.3); }
+
+    .insight-desc {
+      font-size: 9px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    /* -------------------------------------------------------------------------
+       FOOTER STATUS STRIP
+       ------------------------------------------------------------------------- */
+    .soc-footer {
+      background: var(--bg-panel);
+      border-top: 1px solid var(--border-subtle);
+      padding: 4px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-muted);
+      z-index: 100;
+    }
+
+    .footer-left, .footer-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .footer-highlight {
+      color: var(--neon-cyan);
+    }
+
+    /* -------------------------------------------------------------------------
+       RESPONSIVE BREAKPOINTS
+       ------------------------------------------------------------------------- */
+    @media (max-width: 1280px) {
+      .soc-layout {
+        grid-template-columns: 280px 1fr;
+        grid-template-rows: auto auto auto;
+      }
+      .timeline-sidebar {
+        grid-column: 1 / 2;
+        grid-row: 1 / 4;
+      }
+      .center-stage {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+      }
+      .metrics-card {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+      }
+      .analytics-card {
+        grid-column: 2 / 3;
+        grid-row: 3 / 4;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .soc-layout {
+        grid-template-columns: 1fr;
+      }
+      .timeline-sidebar, .center-stage, .metrics-card, .analytics-card {
+        grid-column: 1 / 2;
+        grid-row: auto;
+      }
+      .soc-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .telemetry-tape {
+        width: 100%;
+        overflow-x: auto;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Vibrant Animated Aurora Mesh Gradient Background -->
-  <div class="aurora-bg">
-    <div class="aurora-mesh"></div>
-    <div class="aurora-noise"></div>
-  </div>
-
-  <!-- ========================================================================
-       1. FIXED FROSTED GLASS TOP NAVIGATION BAR
-       ======================================================================== -->
-  <nav class="navbar">
-    <div class="nav-container">
-      <a href="#hero" class="nav-brand">
-        <div class="brand-icon">
-          <!-- Satellite / Radar Icon -->
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4.93 4.93a10 10 0 0 1 14.14 0"></path>
-            <path d="M7.76 7.76a6 6 0 0 1 8.48 0"></path>
-            <circle cx="12" cy="12" r="2"></circle>
-            <path d="m16 16 3 3"></path>
-            <path d="M12 18v3"></path>
-            <path d="m8 16-3 3"></path>
-          </svg>
-        </div>
-        <div class="brand-text">
-          <div class="brand-title">
-            Ilādṛṣṭi <span class="brand-sanskrit">इलादृष्टि</span>
-          </div>
-          <span class="brand-tagline">Multispectral Wildfire AI</span>
-        </div>
-      </a>
-
-      <!-- Navigation Links -->
-      <ul class="nav-links" id="navLinksList">
-        <li><a href="#hero" class="nav-link active">Overview</a></li>
-        <li><a href="#methodology" class="nav-link">Architecture & Loss</a></li>
-        <li><a href="#interactive-demo" class="nav-link">Interactive Demo</a></li>
-        <li><a href="#metrics" class="nav-link">Metrics & Ablation</a></li>
-        <li><a href="#limitations" class="nav-link">Failure Analysis</a></li>
-      </ul>
-
-      <!-- Badges & Action -->
-      <div class="nav-badges">
-        <span class="pill-badge track">
-          <span class="pulse-dot fire"></span> Track 6: AI for Science & Society
-        </span>
-        <span class="pill-badge seed">
-          Seed 42 Locked
-        </span>
-        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- ========================================================================
-       2. HERO SECTION & KPI METRICS HUD
-       ======================================================================== -->
-  <section id="hero" class="page-section hero-section">
-    <div class="container">
-      <div class="hero-card glass-panel">
+  <!-- =========================================================================
+       SVG DEFS FOR REUSABLE MANDALAS & GRAPHICS
+       Pure mathematical geometric SVGs: concentric rings, lotus petals, yantra stars
+       ========================================================================= -->
+  <svg style="display: none;">
+    <defs>
+      <!-- Master Indian Mandala (Sacred Geometry & Concentric Lotus) -->
+      <g id="master-mandala">
+        <!-- Concentric Outer Rings -->
+        <circle cx="200" cy="200" r="192" fill="none" stroke="#d4af37" stroke-width="1" stroke-opacity="0.6"/>
+        <circle cx="200" cy="200" r="185" fill="none" stroke="#00f3ff" stroke-width="1" stroke-dasharray="2 3" stroke-opacity="0.7"/>
+        <circle cx="200" cy="200" r="172" fill="none" stroke="#ff8800" stroke-width="1.5" stroke-opacity="0.8"/>
         
-        <div class="hero-badges-row">
-          <span class="pill-badge track">
-            <span class="pulse-dot fire"></span> Deep Learning Hackathon @ Amrita
-          </span>
-          <span class="pill-badge success">
-            European Space Agency Sentinel-2 L2A
-          </span>
-          <span class="pill-badge seed">
-            Deterministic Evaluation (N=40 Test)
-          </span>
+        <!-- 32 Rays / Sunburst Perimeter -->
+        <g stroke="#d4af37" stroke-width="1" stroke-opacity="0.5">
+          <line x1="200" y1="8" x2="200" y2="28" />
+          <line x1="200" y1="372" x2="200" y2="392" />
+          <line x1="8" y1="200" x2="28" y2="200" />
+          <line x1="372" y1="200" x2="392" y2="200" />
+          <line x1="64" y1="64" x2="78" y2="78" />
+          <line x1="322" y1="322" x2="336" y2="336" />
+          <line x1="64" y1="336" x2="78" y2="322" />
+          <line x1="322" y1="78" x2="336" y2="64" />
+        </g>
+
+        <!-- 16-Point Geometric Star / Yantra Outer Layer -->
+        <polygon points="200,35 215,85 265,55 245,105 305,95 270,140 335,150 285,185 345,200 285,215 335,250 270,260 305,305 245,295 265,345 215,315 200,365 185,315 135,345 155,295 95,305 130,260 65,250 115,215 55,200 115,185 65,150 130,140 95,95 155,105 135,55 185,85"
+          fill="none" stroke="#ff8800" stroke-width="1.2" stroke-opacity="0.6"/>
+
+        <!-- Concentric Ring with 16 Beads -->
+        <circle cx="200" cy="200" r="140" fill="none" stroke="#d4af37" stroke-width="1" stroke-opacity="0.5"/>
+
+        <!-- 8-Petal Classical Indian Lotus -->
+        <g fill="none" stroke="#e04b2b" stroke-width="1.5" stroke-opacity="0.85">
+          <path d="M200,90 Q225,145 200,165 Q175,145 200,90 Z" />
+          <path d="M200,310 Q225,255 200,235 Q175,255 200,310 Z" />
+          <path d="M90,200 Q145,225 165,200 Q145,175 90,200 Z" />
+          <path d="M310,200 Q255,225 235,200 Q255,175 310,200 Z" />
+          <path d="M122,122 Q175,150 175,175 Q150,175 122,122 Z" />
+          <path d="M278,278 Q225,250 225,225 Q250,225 278,278 Z" />
+          <path d="M122,278 Q175,250 175,225 Q150,225 122,278 Z" />
+          <path d="M278,122 Q225,150 225,175 Q250,175 278,122 Z" />
+        </g>
+
+        <!-- Sacred Shatkona (Interlocking Yantra Triangles) -->
+        <polygon points="200,115 273,242 127,242" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-opacity="0.8"/>
+        <polygon points="200,285 273,158 127,158" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-opacity="0.8"/>
+
+        <!-- Inner Lotus Core & Golden Bindu -->
+        <circle cx="200" cy="200" r="50" fill="none" stroke="#d4af37" stroke-width="1.5" stroke-opacity="0.9"/>
+        <circle cx="200" cy="200" r="28" fill="none" stroke="#ff8800" stroke-width="1" stroke-dasharray="3 3"/>
+        <circle cx="200" cy="200" r="14" fill="#d4af37" fill-opacity="0.3" stroke="#d4af37" stroke-width="1.5"/>
+        <circle cx="200" cy="200" r="4" fill="#00f3ff"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- =========================================================================
+       1. TOP NAVIGATION / SOC HEADER
+       ========================================================================= -->
+  <header class="soc-header">
+    <div class="brand-cluster">
+      <!-- Mandala Emblem -->
+      <div class="mandala-badge">
+        <svg viewBox="0 0 400 400">
+          <use href="#master-mandala"/>
+        </svg>
+      </div>
+
+      <div class="brand-title-wrap">
+        <div class="brand-title-row">
+          <span class="brand-title">ILĀDṚṢṬI</span>
+          <span class="brand-sanskrit">इलादृष्टि</span>
         </div>
+        <span class="brand-sub">MULTISPECTRAL SEMANTIC SEGMENTATION // EARTH OBSERVATION</span>
+      </div>
 
-        <h1 class="hero-title">
-          <span class="gradient-text">Ilādṛṣṭi: Multispectral Wildfire</span><br />
-          Semantic Segmentation
-        </h1>
+      <span class="header-track-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/>
+        </svg>
+        TRACK 6: AI FOR SCIENCE &amp; SOCIETY
+      </span>
+    </div>
 
-        <div class="hero-etymology">
-          Sanskrit: <strong>इला</strong> (Earth) + <strong>दृष्टि</strong> (Vision) — Autonomous Earth Observation Intelligence
-        </div>
+    <!-- Live Telemetry & Indicators -->
+    <div class="telemetry-tape">
+      <div class="tele-item">
+        <div class="status-dot"></div>
+        <span class="text-online">SYSTEM: ONLINE</span>
+      </div>
 
-        <p class="hero-mission">
-          Engineered for high-precision autonomous wildfire perimeter delineation and burned area scar mapping.
-          Combines <strong>4-Band Transfer Learning</strong> with <strong>Focal-Tversky Loss Optimization</strong> to penetrate dense smoke hazes,
-          resolve fine perimeter boundaries, and accelerate tactical disaster response and aerial retardant drops.
-        </p>
+      <div class="tele-item">
+        <div class="seed-dot"></div>
+        <span class="text-cyan">SEED: 42 LOCKED</span>
+      </div>
 
-        <div class="hero-actions">
-          <a href="#interactive-demo" class="btn btn-primary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-            Launch Interactive Visual Demo
-          </a>
-          <a href="#methodology" class="btn btn-glass">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="4" y1="9" x2="20" y2="9"></line>
-              <line x1="4" y1="15" x2="20" y2="15"></line>
-              <line x1="10" y1="3" x2="8" y2="21"></line>
-              <line x1="16" y1="3" x2="14" y2="21"></line>
-            </svg>
-            Explore Focal-Tversky Math
-          </a>
-        </div>
+      <div class="tele-item text-muted">
+        <span>SENSOR:</span>
+        <span class="text-gold">SENTINEL-2 L2A (MSI)</span>
+      </div>
 
-        <!-- Live KPI Telemetry Grid -->
-        <div class="kpi-grid">
-          <div class="kpi-card">
-            <div class="kpi-label">Test Dice Score (F1)</div>
-            <div class="kpi-value accent">0.7834</div>
-            <div class="kpi-sub">Held-out test split (N=40)</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Test Mean IoU</div>
-            <div class="kpi-value emerald">0.7044</div>
-            <div class="kpi-sub">Strict spatial Jaccard index</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">NIR Spectral Gain</div>
-            <div class="kpi-value cyan">+7.69%</div>
-            <div class="kpi-sub">+15.3% relative improvement</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Edge GPU Latency</div>
-            <div class="kpi-value">36.4 <span style="font-size: 1rem; font-weight: 500;">FPS</span></div>
-            <div class="kpi-sub">&lt; 50s per full Sentinel tile</div>
-          </div>
-          <div class="kpi-card">
-            <div class="kpi-label">Model Precision</div>
-            <div class="kpi-value">ResNet-50</div>
-            <div class="kpi-sub">4-Band Transfer Adapted U-Net</div>
-          </div>
-        </div>
+      <div class="tele-item text-muted">
+        <span>TILE:</span>
+        <span class="mono" style="color: #fff;">10TFK</span>
+      </div>
 
+      <div class="tele-item">
+        <span class="text-dim">UTC:</span>
+        <span class="text-cyan mono" id="liveUtcClock">12:49:33</span>
       </div>
     </div>
-  </section>
 
-  <!-- ========================================================================
-       3. METHODOLOGY & MATHEMATICAL FORMULATION SECTION
-       ======================================================================== -->
-  <section id="methodology" class="page-section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Methodology & Deep Learning Architecture</div>
-        <h2 class="section-title">ResNet-50 U-Net & Focal-Tversky Loss</h2>
-        <p class="section-desc">
-          Resolving severe spatial class imbalance and smoke occlusion through multispectral weight transfer and gradient-focusing loss formulations.
-        </p>
-      </div>
+    <div class="header-controls">
+      <button class="btn-cyber" id="btnAutoScanToggle">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polygon points="5 3 19 12 5 21 5 3"/>
+        </svg>
+        <span id="scanStatusText">AUTO SCAN</span>
+      </button>
 
-      <div class="methodology-grid">
-        
-        <!-- Left Column: Architecture Technical Breakdown -->
-        <div class="glass-card methodology-text">
-          <h3>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
-              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
-              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
-              <line x1="6" y1="6" x2="6.01" y2="6"></line>
-              <line x1="6" y1="18" x2="6.01" y2="18"></line>
-            </svg>
-            Symmetrical 5-Stage U-Net Architecture
-          </h3>
-          <p>
-            Standard optical segmentation models fail when wildfires occupy less than <strong>5%</strong> of a satellite tile.
-            Ilādṛṣṭi couples a deep <strong>ResNet-50 encoder</strong> with a customized 5-stage expansive decoder to retain fine perimeter details.
-          </p>
-
-          <div class="tech-step-list">
-            <div class="tech-step-item">
-              <div class="step-num">1</div>
-              <div class="step-content">
-                <h4>4-Band Initial Convolution Adaptation</h4>
-                <p>
-                  Adapts ImageNet-pretrained weights to 4-channel input (Red, Green, Blue, NIR). 
-                  The 4th NIR channel kernel is initialized via channel-wise mean averaging, preserving feature transfer without cold-start penalties.
-                </p>
-              </div>
-            </div>
-
-            <div class="tech-step-item">
-              <div class="step-num">2</div>
-              <div class="step-content">
-                <h4>Multi-Scale Residual Skip Connections</h4>
-                <p>
-                  High-resolution feature maps from ResNet stages ($C_1, C_2, C_3, C_4$) are routed directly into the decoder stages, restoring thin fire breaks and boundary perimeters lost during downsampling.
-                </p>
-              </div>
-            </div>
-
-            <div class="tech-step-item">
-              <div class="step-num">3</div>
-              <div class="step-content">
-                <h4>Expansive Decoder with Double Convolutions</h4>
-                <p>
-                  Each decoder stage applies bilinear upsampling followed by double $3\times 3$ convolutions, Batch Normalization, and ReLU activations, terminating in a $1\times 1$ logit projection head.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 4-Band Conv1 Adaptation Formula Callout -->
-          <div class="conv-adaptation-box">
-            <div class="conv-adaptation-title">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="10"></circle>
-                <line x1="12" y1="16" x2="12" y2="12"></line>
-                <line x1="12" y1="8" x2="12.01" y2="8"></line>
-              </svg>
-              Multispectral Weight Transfer Formula:
-            </div>
-            <div id="katexConv" class="formula-display">
-              <!-- KaTeX or Fallback rendered below -->
-              W<sub>conv1</sub>[:, 3:4] &larr; &frac13; &sum;<sub>c=0</sub><sup>2</sup> W<sub>ImageNet</sub>[:, c:c+1]
-            </div>
-          </div>
-
-        </div>
-
-        <!-- Right Column: Dedicated Focal-Tversky Loss Mathematics Block -->
-        <div class="math-block-card glass-panel">
-          <div class="math-header">
-            <div class="math-title">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
-                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-              </svg>
-              Focal-Tversky Loss Formulation
-            </div>
-            <span class="pill-badge track">Phase 2 Objective</span>
-          </div>
-
-          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
-            Standard Binary Cross-Entropy (BCE) treats every pixel equally, allowing overwhelming background pixels (95%) to suppress fire gradient updates. 
-            The <strong>Focal-Tversky Loss ($FTL$)</strong> penalizes False Negatives and concentrates learning on ambiguous boundary pixels.
-          </p>
-
-          <!-- Primary Formula Container -->
-          <div class="math-formula-box">
-            <div id="katexFTL" class="formula-display">
-              FTL = (1 - TI)<sup>&gamma;</sup>
-            </div>
-            <div class="formula-caption">Non-Linear Boundary Focusing Objective</div>
-          </div>
-
-          <div class="math-formula-box" style="margin-bottom: 1.2rem;">
-            <div id="katexTI" class="formula-display" style="font-size: 1.05rem;">
-              TI = (TP + &epsilon;) / (TP + &alpha;&middot;FN + &beta;&middot;FP + &epsilon;)
-            </div>
-            <div class="formula-caption">Asymmetric Tversky Index Formulation</div>
-          </div>
-
-          <!-- Parameter Breakdown Grid -->
-          <div class="math-params-grid">
-            <div class="math-param-item">
-              <div class="param-symbol">&alpha; = 0.7</div>
-              <div class="param-desc">Heavy penalty on False Negatives (missed fire scars) for emergency response.</div>
-            </div>
-            <div class="math-param-item">
-              <div class="param-symbol">&beta; = 0.3</div>
-              <div class="param-desc">Moderate penalty on False Positives to avoid excessive false alarms.</div>
-            </div>
-            <div class="math-param-item">
-              <div class="param-symbol">&gamma; = 1.333</div>
-              <div class="param-desc">Focuses gradient steps on hard, ambiguous boundary contours.</div>
-            </div>
-          </div>
-
-          <div class="math-explanation">
-            <strong>Theoretical Guarantee:</strong> When &gamma; &gt; 1, easy confident predictions ($TI \to 1$) generate near-zero loss, 
-            preventing background saturation and driving backpropagation updates into elusive firebreak margins.
-          </div>
-        </div>
-
-      </div>
+      <button class="btn-cyber" id="btnTelemetryReset">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        RESET
+      </button>
     </div>
-  </section>
+  </header>
 
-  <!-- ========================================================================
-       4. INTERACTIVE VISUAL DEMO (PROMINENT CENTRAL PANEL)
-       ======================================================================== -->
-  <section id="interactive-demo" class="page-section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Interactive Demonstration</div>
-        <h2 class="section-title">Multispectral Inference & Comparison Slider</h2>
-        <p class="section-desc">
-          Drag the interactive divider to compare raw Sentinel-2 satellite inputs directly with Ilādṛṣṭi's predicted wildfire perimeter masks.
-        </p>
-      </div>
+  <!-- =========================================================================
+       MAIN DASHBOARD GRID
+       ========================================================================= -->
+  <main class="soc-layout">
 
-      <div class="demo-card glass-panel interactive">
-        
-        <!-- Controls & Scene Selector Toolbar -->
-        <div class="demo-toolbar">
-          
-          <!-- Test Scenes Selector -->
-          <div class="demo-scenes-selector">
-            <button class="scene-btn active" data-scene-idx="0">
-              <span class="pulse-dot fire"></span> Mega-Fire Scar
-            </button>
-            <button class="scene-btn" data-scene-idx="1">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              Smoke Penetration
-            </button>
-            <button class="scene-btn" data-scene-idx="2">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/></svg>
-              Canopy & Ridge
-            </button>
-            <button class="scene-btn" data-scene-idx="3">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-              Mosaic Fire
-            </button>
-            <button class="scene-btn failure" data-scene-idx="4">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-              Failure: Cloud Cover
-            </button>
-            <button class="scene-btn failure" data-scene-idx="5">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-              Failure: Ravine Shadow
-            </button>
-          </div>
-
-          <!-- Layer Mode & Auto Scan Actions -->
-          <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
-            
-            <div class="layer-modes">
-              <button class="mode-btn active" data-mode="rgb_vs_pred">RGB vs Prediction</button>
-              <button class="mode-btn" data-mode="nir_vs_pred">NIR (CIR) vs Prediction</button>
-              <button class="mode-btn" data-mode="pred_vs_gt">Pred vs Ground Truth</button>
-              <button class="mode-btn" data-mode="rgb_vs_confusion">Spatial Confusion Map</button>
-            </div>
-
-            <button class="btn-scan" id="btnAutoScan">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              Auto Scan
-            </button>
-
-          </div>
-
-        </div>
-
-        <!-- Before / After Split Slider Stage -->
-        <div class="slider-stage-wrapper">
-          <div class="comparison-slider-box" id="comparisonBox">
-            
-            <!-- Left & Right Floating Layer Badges -->
-            <div class="layer-badge left" id="sliderLeftBadge">Raw Sentinel-2 RGB</div>
-            <div class="layer-badge right" id="sliderRightBadge">Predicted Wildfire Mask Overlay</div>
-
-            <!-- Before Image (Base / Underneath) -->
-            <img src="assets/samples/scene1_rgb.png" alt="Raw Satellite Input" class="slider-img before" id="sliderBeforeImg" />
-
-            <!-- After Image (Top / Clipped) -->
-            <img src="assets/samples/scene1_overlay.png" alt="Model Prediction Overlay" class="slider-img after" id="sliderAfterImg" />
-
-            <!-- Divider Line & Glowing Handle -->
-            <div class="slider-handle-line" id="sliderHandleLine">
-              <div class="slider-handle-button" id="sliderHandleBtn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                  <polyline points="15 18 9 12 15 6"></polyline>
-                  <polyline points="9 18 3 12 9 6" style="display: none;"></polyline>
-                  <polyline points="9 6 15 12 9 18"></polyline>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Spatial Confusion Map Legend Overlay (Shown in Confusion Mode) -->
-            <div class="confusion-legend" id="confusionLegend">
-              <div class="legend-item">
-                <span class="legend-color tp"></span> True Positive (Hit)
-              </div>
-              <div class="legend-item">
-                <span class="legend-color fp"></span> False Positive (Commission)
-              </div>
-              <div class="legend-item">
-                <span class="legend-color fn"></span> False Negative (Omission)
-              </div>
-              <div class="legend-item">
-                <span class="legend-color tn"></span> Background (True Negative)
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Real-Time Telemetry HUD Overlay Bar -->
-        <div class="demo-hud-bar">
-          <div class="hud-info">
-            <h5 id="hudSceneName">Mega-Fire Scar Complex (b__06_06.tif)</h5>
-            <p id="hudSceneDesc">Boreal Pine Forest • European Space Agency 10m Ground Sample Distance</p>
-          </div>
-          <div class="hud-metric">
-            <div class="hud-metric-label">Scene Dice</div>
-            <div class="hud-metric-val pink" id="hudDice">0.9317</div>
-          </div>
-          <div class="hud-metric">
-            <div class="hud-metric-label">Mean IoU</div>
-            <div class="hud-metric-val green" id="hudIoU">0.8747</div>
-          </div>
-          <div class="hud-metric">
-            <div class="hud-metric-label">Precision</div>
-            <div class="hud-metric-val" id="hudPrecision">95.3%</div>
-          </div>
-          <div class="hud-metric">
-            <div class="hud-metric-label">Recall</div>
-            <div class="hud-metric-val" id="hudRecall">92.3%</div>
-          </div>
-          <div class="hud-metric">
-            <div class="hud-metric-label">Burned Scar Area</div>
-            <div class="hud-metric-val pink" id="hudArea">74.0%</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       5. METRICS & ABLATION DASHBOARD
-       ======================================================================== -->
-  <section id="metrics" class="page-section">
-    <div class="container">
-      <div class="section-header">
-        <div class="section-tag">Empirical Results & Spectral Ablation</div>
-        <h2 class="section-title">Benchmark Evaluation Dashboard</h2>
-        <p class="section-desc">
-          Strict deterministic evaluation across an isolated held-out test split (Seed locked at 42).
-          Comparing Mandatory Baseline (BCE) against Focal-Tversky across spectral configurations.
-        </p>
-      </div>
-
-      <!-- Tab Navigation -->
-      <div class="metrics-nav">
-        <button class="tab-btn active" data-tab-target="tabAllCharts">Visual Charts Grid</button>
-        <button class="tab-btn" data-tab-target="tabBenchmarkTable">Detailed Data Table</button>
-      </div>
-
-      <!-- Tab Pane 1: Charts Grid -->
-      <div id="tabAllCharts" class="tab-pane">
-        <div class="charts-grid">
-          
-          <!-- Chart 1: Model Benchmark Comparison -->
-          <div class="chart-card">
-            <div class="chart-header">
-              <div class="chart-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
-                  <line x1="18" y1="20" x2="18" y2="10"></line>
-                  <line x1="12" y1="20" x2="12" y2="4"></line>
-                  <line x1="6" y1="20" x2="6" y2="14"></line>
-                </svg>
-                Model Architecture Benchmark (Held-out Test N=40)
-              </div>
-              <span class="pill-badge track">Dice &amp; IoU</span>
-            </div>
-            <div class="chart-container">
-              <canvas id="benchmarkChart"></canvas>
-            </div>
-          </div>
-
-          <!-- Chart 2: Spectral Gain Breakdown -->
-          <div class="chart-card">
-            <div class="chart-header">
-              <div class="chart-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
-                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-                </svg>
-                NIR Spectral Gain Breakdown (3-Band vs 4-Band)
-              </div>
-              <span class="pill-badge success">+7.69% Absolute Gain</span>
-            </div>
-            <div class="chart-container">
-              <canvas id="spectralChart"></canvas>
-            </div>
-          </div>
-
-          <!-- Chart 3: 15-Epoch Training Progression (Full Width) -->
-          <div class="chart-card full-width">
-            <div class="chart-header">
-              <div class="chart-title">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>
-                15-Epoch Training Progression &amp; Validation Convergence
-              </div>
-              <span class="pill-badge seed">⭐ Best Model Checkpoint at Epoch 5</span>
-            </div>
-            <div class="chart-container" style="height: 350px;">
-              <canvas id="trainingChart"></canvas>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- Tab Pane 2: Structured Benchmark Table -->
-      <div id="tabBenchmarkTable" class="tab-pane" style="display: none;">
-        <div class="benchmark-table-card glass-panel">
-          <table class="benchmark-table">
-            <thead>
-              <tr>
-                <th>Experiment Name</th>
-                <th>Input Bands</th>
-                <th>Objective Loss Function</th>
-                <th>Val Dice (F1)</th>
-                <th>Val Mean IoU</th>
-                <th>Test Dice (F1)</th>
-                <th>Test Mean IoU</th>
-                <th>Test Loss</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr class="winner-row">
-                <td>
-                  <strong>Mandatory Baseline</strong>
-                  <span class="pill-badge track" style="margin-left: 0.5rem; font-size: 0.65rem;">Highest Overall</span>
-                </td>
-                <td>4 (RGB + NIR)</td>
-                <td>BCEWithLogitsLoss</td>
-                <td>0.6924</td>
-                <td>0.6100</td>
-                <td><span class="highlight-stat">0.7834</span></td>
-                <td><span class="highlight-stat">0.7044</span></td>
-                <td>0.3781</td>
-              </tr>
-              <tr>
-                <td><strong>Ablation Run 1 (3-Band)</strong></td>
-                <td>3 (RGB-Only)</td>
-                <td>Focal-Tversky Loss (&alpha;=0.7, &beta;=0.3, &gamma;=1.333)</td>
-                <td>0.4414</td>
-                <td>0.3653</td>
-                <td>0.5027</td>
-                <td>0.4245</td>
-                <td>0.5154</td>
-              </tr>
-              <tr>
-                <td><strong>Ablation Run 2 (4-Band)</strong></td>
-                <td>4 (RGB + NIR)</td>
-                <td>Focal-Tversky Loss (&alpha;=0.7, &beta;=0.3, &gamma;=1.333)</td>
-                <td>0.4840</td>
-                <td>0.4034</td>
-                <td>0.5796</td>
-                <td>0.5013</td>
-                <td>0.5102</td>
-              </tr>
-              <tr style="background: rgba(16, 185, 129, 0.08); font-weight: 700;">
-                <td style="color: #6ee7b7;">NIR Band Contribution (&Delta;)</td>
-                <td style="color: #6ee7b7;">+1 Band (NIR)</td>
-                <td style="color: #6ee7b7;">Empirical Physical Delta</td>
-                <td style="color: #6ee7b7;">+0.0426</td>
-                <td style="color: #6ee7b7;">+0.0381</td>
-                <td style="color: #6ee7b7;">+0.0769 (+15.3%)</td>
-                <td style="color: #6ee7b7;">+0.0768 (+18.1%)</td>
-                <td style="color: #6ee7b7;">-0.0052</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ========================================================================
-       6. LIMITATIONS & FAILURE CASES (HONEST NEGATIVE RESULTS)
-       ======================================================================== -->
-  <section id="limitations" class="page-section limitations-section">
-    <div class="container">
+    <!-- =======================================================================
+         2. LEFT SIDEBAR - INFERENCE FLOW TIMELINE (VERTICAL STEPPER)
+         ======================================================================= -->
+    <section class="soc-card timeline-sidebar">
+      <div class="corner-flourish tl"></div>
+      <div class="corner-flourish tr"></div>
       
-      <div class="section-header">
-        <div class="section-tag" style="color: #f87171;">Scientific Integrity &amp; Edge Cases</div>
-        <h2 class="section-title">Limitations &amp; Optical Failure Analysis</h2>
-        <p class="section-desc">
-          Honest accounting of physical optical ambiguities, false positive triggers under extreme atmospheric conditions, and proposed architectural mitigations.
-        </p>
-      </div>
+      <!-- Subtle Mandala Watermark -->
+      <svg class="mandala-watermark bottom-left" viewBox="0 0 400 400">
+        <use href="#master-mandala"/>
+      </svg>
 
-      <!-- Warning Callout Banner -->
-      <div class="limitations-banner">
-        <div class="limitations-icon">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
-            <line x1="12" y1="9" x2="12" y2="13"></line>
-            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      <div class="card-header">
+        <div class="card-title-group">
+          <svg class="card-icon-svg text-cyan" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
           </svg>
+          <span class="card-title">Inference Pipeline</span>
         </div>
-        <div class="limitations-banner-text">
-          <h3>Transparent Negative Results Audit</h3>
-          <p>
-            While Ilādṛṣṭi demonstrates high accuracy across standard vegetative wildfire regimes, optical satellite systems 
-            suffer from physical photon scattering ambiguities where non-fire phenomena exhibit spectral signatures resembling carbonized ash.
-          </p>
-        </div>
+        <span class="card-badge badge-cyan">6 STAGES</span>
       </div>
 
-      <!-- Failure Analysis Breakdown Cards -->
-      <div class="failure-cases-grid">
-        
-        <!-- Case 1: Dense Cloud Cover -->
-        <div class="failure-card">
-          <div class="failure-card-header">
-            <div class="failure-card-title">1. Dense Clouds &amp; Edge Diffraction</div>
-            <span class="failure-badge">False Positive Commission</span>
-          </div>
-          <div class="failure-card-body">
-            <div class="failure-row">
-              <span class="failure-row-label">Physical Mechanism</span>
-              <p class="failure-row-desc">
-                High-albedo cloud tops reflect &gt;85% of visible and NIR solar radiation. 
-                At cloud edges, sharp dropoffs create extreme spatial gradients that convolutional filters occasionally mistake for fresh fire perimeters.
-              </p>
-            </div>
-            <div class="failure-row">
-              <span class="failure-row-label">Observed Impact</span>
-              <p class="failure-row-desc">
-                Fringe false alarm rings bordering thick stratocumulus banks (demonstrated in Scene <code>a1__07_13</code> with 13,269 FP pixels).
-              </p>
-            </div>
-            <div class="failure-mitigation">
-              <strong>Phase 3 Mitigation:</strong> Ingestion of Sentinel-2 Scene Classification Layer (SCL) to pre-mask cloud and cirrus pixels prior to inference.
+      <div class="card-body">
+        <div class="stepper-container" id="pipelineStepper">
+          
+          <!-- Step 1 -->
+          <div class="stepper-step active" data-step="1">
+            <div class="step-indicator">01</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">Data Loading (Rasterio)</span>
+                <span class="step-time">12.4ms</span>
+              </div>
+              <p class="step-desc">Ingests multispectral L2A bands B02, B03, B04, B08. TOA reflectance normalization.</p>
+              <span class="step-tensor">[B, 4, 512, 512] float32</span>
             </div>
           </div>
+
+          <!-- Step 2 -->
+          <div class="stepper-step" data-step="2">
+            <div class="step-indicator">02</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">Multispectral Augmentation</span>
+                <span class="step-time">8.1ms</span>
+              </div>
+              <p class="step-desc">Synchronized geometric flips, CutMix &amp; synthesized cloud shadow attenuations.</p>
+              <span class="step-tensor">Co-registered 4-Channel</span>
+            </div>
+          </div>
+
+          <!-- Step 3 -->
+          <div class="stepper-step" data-step="3">
+            <div class="step-indicator">03</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">ResNet-50 Encoder</span>
+                <span class="step-time">48.2ms</span>
+              </div>
+              <p class="step-desc">Adapted Conv1 weight transfer with NIR channel mean initialization. C1-C5 extraction.</p>
+              <span class="step-tensor">Bottleneck [2048, 16, 16]</span>
+            </div>
+          </div>
+
+          <!-- Step 4 -->
+          <div class="stepper-step" data-step="4">
+            <div class="step-indicator">04</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">U-Net Decoder</span>
+                <span class="step-time">34.6ms</span>
+              </div>
+              <p class="step-desc">5-stage expansive decoder with multi-scale skip residual connections for thin firebreaks.</p>
+              <span class="step-tensor">Upsample [64, 512, 512]</span>
+            </div>
+          </div>
+
+          <!-- Step 5 -->
+          <div class="stepper-step" data-step="5">
+            <div class="step-indicator">05</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">Focal-Tversky Loss</span>
+                <span class="step-time">4.2ms</span>
+              </div>
+              <p class="step-desc">Asymmetric penalty (alpha=0.7, beta=0.3, gamma=1.33) resolving 95:5 class imbalance.</p>
+              <span class="step-tensor">FTL Boundary Gradient</span>
+            </div>
+          </div>
+
+          <!-- Step 6 -->
+          <div class="stepper-step" data-step="6">
+            <div class="step-indicator">06</div>
+            <div class="step-content">
+              <div class="step-header">
+                <span class="step-title">Final Mask Generation</span>
+                <span class="step-time">6.8ms</span>
+              </div>
+              <p class="step-desc">Sigmoid logit thresholding (tau=0.48), morphological cleanup, GeoJSON polygonization.</p>
+              <span class="step-tensor">Binary Delineation Mask</span>
+            </div>
+          </div>
+
         </div>
 
-        <!-- Case 2: Deep Topographic Shadows -->
-        <div class="failure-card">
-          <div class="failure-card-header">
-            <div class="failure-card-title">2. Deep Mountain Ravine Shadows</div>
-            <span class="failure-badge">Ash Spectral Mimicry</span>
+        <!-- Real-Time Hardware / Pipeline Telemetry -->
+        <div class="step-telemetry-box">
+          <div class="telemetry-row">
+            <span class="text-muted">TOTAL INFERENCE LATENCY:</span>
+            <span class="text-cyan">114.3 ms (8.7 FPS)</span>
           </div>
-          <div class="failure-card-body">
-            <div class="failure-row">
-              <span class="failure-row-label">Physical Mechanism</span>
-              <p class="failure-row-desc">
-                Steep north-facing alpine ravines receive minimal direct solar irradiance. 
-                Low reflectance values (&lt;0.05 across RGB and NIR) deceptively mimic the flat, dark optical absorption profile of charcoal ash.
-              </p>
-            </div>
-            <div class="failure-row">
-              <span class="failure-row-label">Observed Impact</span>
-              <p class="failure-row-desc">
-                Localized false positive clusters in deep mountain gorges (demonstrated in Scene <code>k__4_6</code> with 7,211 FP pixels).
-              </p>
-            </div>
-            <div class="failure-mitigation">
-              <strong>Phase 3 Mitigation:</strong> Fusing Short-Wave Infrared (SWIR Band 12, 2190nm) and Digital Elevation Model (DEM) hillshading layers.
-            </div>
+          <div class="telemetry-row">
+            <span class="text-muted">VRAM CONSUMPTION:</span>
+            <span class="text-gold">3.42 GB / 16.00 GB</span>
           </div>
-        </div>
-
-        <!-- Case 3: Transient Grassland Burns -->
-        <div class="failure-card">
-          <div class="failure-card-header">
-            <div class="failure-card-title">3. Low-Biomass Grassland Scars</div>
-            <span class="failure-badge" style="background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); color: #fde68a;">
-              Transient Omission
-            </span>
+          <div class="telemetry-row">
+            <span class="text-muted">PRECISION PROFILE:</span>
+            <span class="text-online">AMP FP16 TENSOR CORES</span>
           </div>
-          <div class="failure-card-body">
-            <div class="failure-row">
-              <span class="failure-row-label">Physical Mechanism</span>
-              <p class="failure-row-desc">
-                Fast-moving savanna grass fires leave only ephemeral surface soot without deep canopy destruction. 
-                Wind rapidly scatters the light ash layer within 48 hours, causing spectral signatures to revert before satellite revisit.
-              </p>
-            </div>
-            <div class="failure-row">
-              <span class="failure-row-label">Observed Impact</span>
-              <p class="failure-row-desc">
-                Under-segmentation (False Negatives) for thin pasture fires compared to dense coniferous forest burns.
-              </p>
-            </div>
-            <div class="failure-mitigation">
-              <strong>Phase 3 Mitigation:</strong> Bi-temporal Sentinel-2 pre/post difference mapping (dNBR) to detect transient vegetative biomass shifts.
-            </div>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- Failure Case Side-by-Side Visual Showcase -->
-      <div class="failure-viewer-card glass-panel">
-        <h4 style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem;">
-          Empirical Failure Showcase: Cloud Boundary &amp; Shadow False Positives
-        </h4>
-        <p style="font-size: 0.88rem; color: var(--text-secondary);">
-          Direct inspection of actual test samples where optical limitations triggered false alarms:
-        </p>
-
-        <div class="failure-viewer-grid">
-          <div class="failure-tile">
-            <img src="assets/samples/failure_cloud_rgb.png" alt="Cloud Tile Sentinel-2 RGB" />
-            <span class="failure-tile-caption">1. Sentinel-2 RGB (Cloud Scene a1__07_13)</span>
-          </div>
-          <div class="failure-tile">
-            <img src="assets/samples/failure_cloud_overlay.png" alt="Prediction Overlay on Cloud Scene" />
-            <span class="failure-tile-caption">2. False Alarms along Cloud Margin (Red Overlay)</span>
-          </div>
-          <div class="failure-tile">
-            <img src="assets/samples/failure_cloud_confusion.png" alt="Spatial Confusion Map" />
-            <span class="failure-tile-caption">3. Spatial Confusion Map (Red = False Positive Commission)</span>
+          <div class="telemetry-row">
+            <span class="text-muted">TILE RESOLUTION:</span>
+            <span class="mono" style="color:#fff;">512x512 px @ 10m GSD</span>
           </div>
         </div>
       </div>
+    </section>
 
-    </div>
-  </section>
+    <!-- =======================================================================
+         3. CENTER STAGE - INTERACTIVE VISUAL DEMO (LARGE MAP/IMAGERY PANEL)
+         ======================================================================= -->
+    <section class="soc-card center-stage">
+      <div class="corner-flourish tl"></div>
+      <div class="corner-flourish tr"></div>
+      <div class="corner-flourish bl"></div>
+      <div class="corner-flourish br"></div>
 
-  <!-- ========================================================================
-       7. FOOTER & REPRODUCIBILITY SPECS
-       ======================================================================== -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-content">
-        
-        <div class="footer-brand">
-          <div class="brand-title" style="font-size: 1.4rem;">
-            Ilādṛṣṭi <span class="brand-sanskrit">इलादृष्टि</span>
-          </div>
-          <p>
-            Multispectral Semantic Segmentation for Wildfire Progression.<br />
-            Developed for <strong>Track 6: AI for Science &amp; Society</strong> at the Deep Learning Hackathon, Amrita Vishwa Vidyapeetham.
-          </p>
+      <!-- Center Mandala Watermark -->
+      <svg class="mandala-watermark center" viewBox="0 0 400 400">
+        <use href="#master-mandala"/>
+      </svg>
+
+      <div class="card-header">
+        <div class="card-title-group">
+          <svg class="card-icon-svg text-saffron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 2 7 12 12 22 7 12 2"/>
+            <polyline points="2 17 12 22 22 17"/>
+            <polyline points="2 12 12 17 22 12"/>
+          </svg>
+          <span class="card-title">Tactical Imagery Comparison Stage</span>
         </div>
+        <div class="imagery-toolbar">
+          <div class="spectral-bands">
+            <button class="band-btn active" data-band="rgb">
+              <span>RGB TRUE COLOR</span>
+            </button>
+            <button class="band-btn" data-band="nir">
+              <span>NIR (CIR B8-B4-B3)</span>
+            </button>
+            <button class="band-btn" data-band="swir">
+              <span>SWIR SMOKE-PEN</span>
+            </button>
+          </div>
+          <span class="card-badge badge-saffron" id="sliderRatioBadge">SPLIT: 50%</span>
+        </div>
+      </div>
 
-        <div class="footer-links">
-          <span class="pill-badge seed">PyTorch 2.0+</span>
-          <span class="pill-badge track">Seed 42 Deterministic</span>
-          <span class="pill-badge success">ESA Copernicus Open Data</span>
-          <a href="https://github.com/flykrth/iladrsti" target="_blank" rel="noopener noreferrer" class="btn btn-glass" style="padding: 0.45rem 1rem; font-size: 0.82rem;">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+      <div class="card-body" style="padding: 10px;">
+        <div class="imagery-viewport-wrapper" id="sliderViewport">
+          
+          <!-- Grid Crosshairs and Reticle Background -->
+          <div class="crosshair-grid"></div>
+
+          <!-- HUD Floating Telemetry -->
+          <div class="hud-overlay hud-top-left">
+            <div class="hud-pill">
+              <span class="text-cyan">SCENE:</span> S2A_MSIL2A_CASCADE_T10TFK
+            </div>
+            <div class="hud-pill text-muted">
+              <span>COORDS:</span> 42°18'44"N 122°41'12"W
+            </div>
+            <div class="hud-pill text-muted">
+              <span>ACQUISITION:</span> 2024-08-14 19:24:11 UTC
+            </div>
+          </div>
+
+          <div class="hud-overlay hud-top-right">
+            <div class="hud-pill">
+              <span class="text-terracotta">FIRE FRONT:</span> ACTIVE EXPANSION
+            </div>
+            <div class="hud-pill text-saffron">
+              <span>SPREAD VECTOR:</span> 042° NE @ 1.8 km/h
+            </div>
+            <div class="hud-pill text-online">
+              <span>FLAME PERIMETER:</span> 14.82 km
+            </div>
+          </div>
+
+          <!-- Hotspot Bounding Boxes (Simulated Tactical Detections) -->
+          <div class="fire-tag" style="top: 36%; left: 32%; width: 110px; height: 75px;">
+            <div class="fire-label">HOTSPOT A // 98.4% CONF</div>
+          </div>
+          <div class="fire-tag" style="top: 60%; left: 22%; width: 90px; height: 60px;">
+            <div class="fire-label">HOTSPOT B // 94.1% CONF</div>
+          </div>
+
+          <!-- Split Slider Stage -->
+          <div class="split-slider-stage" id="splitStage">
+
+            <!-- LAYER 1: BASE RAW SATELLITE INPUT (Simulated Multispectral Landscape via pure SVG) -->
+            <svg class="layer-canvas" id="baseSatelliteSvg" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid slice">
+              <defs>
+                <!-- Topography Relief Shading -->
+                <linearGradient id="topoSlopeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#0c1d13"/>
+                  <stop offset="40%" stop-color="#183622"/>
+                  <stop offset="70%" stop-color="#244b2d"/>
+                  <stop offset="100%" stop-color="#112417"/>
+                </linearGradient>
+
+                <!-- Ridge & Mountain Slope Gradient -->
+                <linearGradient id="mountainRidgeGrad" x1="20%" y1="0%" x2="80%" y2="100%">
+                  <stop offset="0%" stop-color="#3b3225"/>
+                  <stop offset="50%" stop-color="#262118"/>
+                  <stop offset="100%" stop-color="#14241a"/>
+                </linearGradient>
+
+                <!-- Canyon River Gradient -->
+                <linearGradient id="riverGrad" x1="0%" y1="0%" x2="100%" y2="50%">
+                  <stop offset="0%" stop-color="#14303f"/>
+                  <stop offset="50%" stop-color="#1a4861"/>
+                  <stop offset="100%" stop-color="#0e2330"/>
+                </linearGradient>
+
+                <!-- Heavy Optical Smoke Plume (RGB Mode: opaque haze; NIR/SWIR: penetrable) -->
+                <radialGradient id="smokeHazeGrad" cx="30%" cy="50%" r="55%">
+                  <stop offset="0%" stop-color="#d4dee8" stop-opacity="0.82"/>
+                  <stop offset="40%" stop-color="#b0c0d1" stop-opacity="0.65"/>
+                  <stop offset="75%" stop-color="#8ba1b8" stop-opacity="0.35"/>
+                  <stop offset="100%" stop-color="#70879e" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Base Landscape Terrain -->
+              <rect width="1000" height="650" fill="url(#topoSlopeGrad)" id="terrainBaseRect"/>
+
+              <!-- Mountain Ridges & Contours -->
+              <path d="M-50,220 Q120,180 240,230 T540,160 T820,220 T1050,140 L1050,450 L-50,450 Z" fill="url(#mountainRidgeGrad)" opacity="0.85"/>
+              <path d="M-50,380 Q180,310 380,360 T720,290 T1050,360 L1050,650 L-50,650 Z" fill="#132418" opacity="0.95"/>
+
+              <!-- Topographic Elevation Contour Lines -->
+              <g fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4 4">
+                <path d="M0,100 Q250,70 500,120 T1000,80" />
+                <path d="M0,180 Q300,130 600,200 T1000,150" />
+                <path d="M0,260 Q280,210 550,280 T1000,240" />
+                <path d="M0,340 Q350,300 650,370 T1000,310" />
+                <path d="M0,440 Q260,390 520,460 T1000,420" />
+                <path d="M0,540 Q380,490 700,560 T1000,500" />
+              </g>
+
+              <!-- River / Canyon System -->
+              <path d="M1000,190 Q750,280 620,240 T380,390 T120,450 T-20,580" fill="none" stroke="url(#riverGrad)" stroke-width="14" stroke-linecap="round"/>
+              <path d="M1000,190 Q750,280 620,240 T380,390 T120,450 T-20,580" fill="none" stroke="#256282" stroke-width="4" stroke-opacity="0.6"/>
+
+              <!-- Agricultural & Forest Canopy Textures -->
+              <g opacity="0.35">
+                <rect x="740" y="80" width="120" height="90" fill="#2d4022" stroke="rgba(255,255,255,0.1)"/>
+                <rect x="870" y="90" width="80" height="110" fill="#22361b" stroke="rgba(255,255,255,0.1)"/>
+                <rect x="760" y="440" width="160" height="120" fill="#1b2e1a" stroke="rgba(255,255,255,0.1)"/>
+              </g>
+
+              <!-- Dense White/Grey Optical Smoke Plume Drifting Across the Scene -->
+              <g id="smokePlumeGroup">
+                <path d="M180,480 Q250,320 400,260 T750,140 Q900,90 1020,40 L1020,380 Q780,420 540,490 Z" fill="url(#smokeHazeGrad)" />
+                <ellipse cx="380" cy="360" rx="190" ry="110" fill="url(#smokeHazeGrad)" />
+                <ellipse cx="620" cy="240" rx="240" ry="130" fill="url(#smokeHazeGrad)" />
+              </g>
             </svg>
-            GitHub Repository
-          </a>
+
+            <!-- LAYER 2: AI PREDICTED WILDFIRE MASK (Clipped by slider position) -->
+            <div class="layer-after-wrap" id="sliderClipWrap">
+              <svg class="layer-canvas" id="predWildfireSvg" viewBox="0 0 1000 650" preserveAspectRatio="xMidYMid slice">
+                <defs>
+                  <!-- Active Fire Front Glowing Flame Filter -->
+                  <filter id="fireGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="6" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+
+                  <!-- Burn Scar Charcoal Gradient -->
+                  <radialGradient id="burnScarGrad" cx="35%" cy="55%" r="50%">
+                    <stop offset="0%" stop-color="#0a0504"/>
+                    <stop offset="65%" stop-color="#140b08"/>
+                    <stop offset="90%" stop-color="#24120c"/>
+                    <stop offset="100%" stop-color="#381a10"/>
+                  </radialGradient>
+
+                  <!-- Active Firefront Molten Gradient -->
+                  <linearGradient id="firefrontGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ffcc00"/>
+                    <stop offset="35%" stop-color="#ff8800"/>
+                    <stop offset="70%" stop-color="#e04b2b"/>
+                    <stop offset="100%" stop-color="#ff2200"/>
+                  </linearGradient>
+
+                  <!-- Infrared Canopy False Color -->
+                  <linearGradient id="nirCanopyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#381018"/>
+                    <stop offset="40%" stop-color="#4a1520"/>
+                    <stop offset="70%" stop-color="#611b2a"/>
+                    <stop offset="100%" stop-color="#2d0a12"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Base NIR False Color Ground (Revealed beneath penetrable smoke) -->
+                <rect width="1000" height="650" fill="url(#nirCanopyGrad)" id="nirBaseRect"/>
+
+                <!-- Topo relief lines retained -->
+                <g fill="none" stroke="rgba(0,243,255,0.08)" stroke-width="1" stroke-dasharray="4 4">
+                  <path d="M0,100 Q250,70 500,120 T1000,80" />
+                  <path d="M0,180 Q300,130 600,200 T1000,150" />
+                  <path d="M0,260 Q280,210 550,280 T1000,240" />
+                  <path d="M0,340 Q350,300 650,370 T1000,310" />
+                  <path d="M0,440 Q260,390 520,460 T1000,420" />
+                  <path d="M0,540 Q380,490 700,560 T1000,500" />
+                </g>
+
+                <!-- River Canyon under Multispectral Reflectance -->
+                <path d="M1000,190 Q750,280 620,240 T380,390 T120,450 T-20,580" fill="none" stroke="#00f3ff" stroke-width="8" stroke-opacity="0.4"/>
+
+                <!-- AI SEGMENTATION: BURNED SCAR AREA (High-confidence charred soil) -->
+                <path d="M220,520 Q260,400 320,350 T480,280 T610,260 Q660,300 640,380 T540,460 T380,540 T240,550 Z"
+                      fill="url(#burnScarGrad)" stroke="#ff4b2b" stroke-width="1.5" stroke-opacity="0.7"/>
+
+                <!-- Scorched Island Secondary Cluster -->
+                <path d="M480,240 Q550,180 620,200 T680,240 Q620,270 540,260 Z"
+                      fill="url(#burnScarGrad)" stroke="#ff4b2b" stroke-width="1.5" stroke-opacity="0.7"/>
+
+                <!-- AI SEGMENTATION: ACTIVE EXPANDING FLAME PERIMETER (Neon Saffron / Terracotta) -->
+                <path d="M220,520 Q260,400 320,350 T480,280 T610,260 Q660,300 640,380"
+                      fill="none" stroke="url(#firefrontGrad)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#fireGlow)"/>
+
+                <path d="M480,240 Q550,180 620,200 T680,240"
+                      fill="none" stroke="url(#firefrontGrad)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" filter="url(#fireGlow)"/>
+
+                <!-- Model Razor-Sharp Vector Boundary (Neon Cyan Prediction Contours) -->
+                <path d="M220,520 Q260,400 320,350 T480,280 T610,260 Q660,300 640,380 T540,460 T380,540 T240,550 Z"
+                      fill="none" stroke="#00f3ff" stroke-width="2" stroke-dasharray="6 3"/>
+
+                <path d="M480,240 Q550,180 620,200 T680,240 Q620,270 540,260 Z"
+                      fill="none" stroke="#00f3ff" stroke-width="2" stroke-dasharray="6 3"/>
+
+                <!-- Active Ignition Core Embers (Pulsing Sparks) -->
+                <circle cx="340" cy="340" r="7" fill="#ffea00" filter="url(#fireGlow)"/>
+                <circle cx="490" cy="275" r="8" fill="#ffea00" filter="url(#fireGlow)"/>
+                <circle cx="615" cy="260" r="7" fill="#ffea00" filter="url(#fireGlow)"/>
+                <circle cx="560" cy="195" r="6" fill="#ffea00" filter="url(#fireGlow)"/>
+                <circle cx="250" cy="450" r="6" fill="#ff5500" filter="url(#fireGlow)"/>
+              </svg>
+            </div>
+
+            <!-- Interactive Split Handle -->
+            <div class="slider-divider" id="sliderDivider">
+              <div class="slider-handle">
+                <svg viewBox="0 0 24 24">
+                  <path d="M8 5v14l-6-7 6-7zm8 0v14l6-7-6-7z"/>
+                </svg>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom HUD Metrics Bar -->
+          <div class="hud-bottom-bar">
+            <div style="display:flex; gap:16px; align-items:center;">
+              <span class="mono text-cyan" style="font-size: 10px;">DIVIDER: <span id="splitPercentLabel">50%</span></span>
+              <span class="text-dim">|</span>
+              <span class="text-muted">MODE: <span class="text-saffron" id="activeModeLabel">RGB RAW vs AI MASK</span></span>
+            </div>
+            <div style="display:flex; gap:16px; align-items:center;">
+              <span class="text-muted">DELINEATED AREA: <span class="text-gold mono">384.6 HECTARES</span></span>
+              <span class="text-dim">|</span>
+              <span class="text-muted">PERIMETER CONFIDENCE: <span class="text-online mono">96.8%</span></span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         4. TOP RIGHT - PERFORMANCE GAUGES (DONUT/GAUGE CHARTS)
+         ======================================================================= -->
+    <section class="soc-card metrics-card">
+      <div class="corner-flourish tr"></div>
+      
+      <!-- Subtle Mandala Watermark -->
+      <svg class="mandala-watermark top-right" viewBox="0 0 400 400">
+        <use href="#master-mandala"/>
+      </svg>
+
+      <div class="card-header">
+        <div class="card-title-group">
+          <svg class="card-icon-svg text-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="M12 16V8"/>
+          </svg>
+          <span class="card-title">Model Performance</span>
+        </div>
+        <span class="card-badge badge-saffron">N=40 TEST</span>
+      </div>
+
+      <div class="card-body">
+        
+        <!-- Half-Circle SVG Gauges Grid -->
+        <div class="gauges-container">
+          
+          <!-- Gauge 1: Overall IoU Score (0.842) -->
+          <div class="gauge-card">
+            <div class="gauge-svg-wrap">
+              <svg viewBox="0 0 120 70">
+                <defs>
+                  <linearGradient id="iouGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#ff8800"/>
+                    <stop offset="60%" stop-color="#d4af37"/>
+                    <stop offset="100%" stop-color="#00f3ff"/>
+                  </linearGradient>
+                </defs>
+                <!-- Background Arc: Radius=50, Arc Circumference = PI * 50 = 157.08 -->
+                <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="rgba(26, 35, 51, 0.8)" stroke-width="10" stroke-linecap="round"/>
+                <!-- Filled Arc: 84.2% of 157.08 = 132.26, stroke-dashoffset = 157.08 - 132.26 = 24.82 -->
+                <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="url(#iouGaugeGrad)" stroke-width="10" stroke-linecap="round"
+                      stroke-dasharray="157.08" stroke-dashoffset="24.82" style="filter: drop-shadow(0 0 5px rgba(0, 243, 255, 0.4));"/>
+                <!-- Target Benchmark Line at 80% (Angle ~ 144 deg) -->
+                <line x1="90" y1="20" x2="94" y2="16" stroke="#00ffaa" stroke-width="2"/>
+              </svg>
+              <div class="gauge-value-center text-cyan" id="iouScoreVal">0.842</div>
+            </div>
+            <div class="gauge-metric-title">Overall IoU Score</div>
+            <div class="gauge-target">
+              <span>TARGET &gt; 0.80</span>
+            </div>
+          </div>
+
+          <!-- Gauge 2: Dice Coefficient (0.914) -->
+          <div class="gauge-card">
+            <div class="gauge-svg-wrap">
+              <svg viewBox="0 0 120 70">
+                <defs>
+                  <linearGradient id="diceGaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#a855f7"/>
+                    <stop offset="60%" stop-color="#00f3ff"/>
+                    <stop offset="100%" stop-color="#00ffaa"/>
+                  </linearGradient>
+                </defs>
+                <!-- Background Arc -->
+                <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="rgba(26, 35, 51, 0.8)" stroke-width="10" stroke-linecap="round"/>
+                <!-- Filled Arc: 91.4% of 157.08 = 143.57, stroke-dashoffset = 157.08 - 143.57 = 13.51 -->
+                <path d="M10,65 A50,50 0 0,1 110,65" fill="none" stroke="url(#diceGaugeGrad)" stroke-width="10" stroke-linecap="round"
+                      stroke-dasharray="157.08" stroke-dashoffset="13.51" style="filter: drop-shadow(0 0 5px rgba(168, 85, 247, 0.4));"/>
+                <!-- Target Benchmark Line at 85% -->
+                <line x1="95" y1="25" x2="99" y2="21" stroke="#00ffaa" stroke-width="2"/>
+              </svg>
+              <div class="gauge-value-center text-purple" id="diceScoreVal">0.914</div>
+            </div>
+            <div class="gauge-metric-title">Dice Coefficient</div>
+            <div class="gauge-target">
+              <span>TARGET &gt; 0.88</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- 4 Small Stat Blocks -->
+        <div class="stat-blocks-grid">
+          
+          <div class="stat-block">
+            <span class="stat-label">Active Detections</span>
+            <div class="stat-val-row">
+              <span class="stat-val text-saffron">48</span>
+              <span class="stat-delta text-online">+7 (Pass)</span>
+            </div>
+          </div>
+
+          <div class="stat-block">
+            <span class="stat-label">Processed Hectares</span>
+            <div class="stat-val-row">
+              <span class="stat-val text-cyan">14,280</span>
+              <span class="stat-delta text-muted">100 km²</span>
+            </div>
+          </div>
+
+          <div class="stat-block">
+            <span class="stat-label">False Positive Rate</span>
+            <div class="stat-val-row">
+              <span class="stat-val text-online">1.84%</span>
+              <span class="stat-delta text-online">-7.1% vs BCE</span>
+            </div>
+          </div>
+
+          <div class="stat-block">
+            <span class="stat-label">Edge Inference Speed</span>
+            <div class="stat-val-row">
+              <span class="stat-val mono" style="color: #fff;">36.4 <span style="font-size:10px; font-weight:400;">FPS</span></span>
+              <span class="stat-delta text-cyan">27.4ms</span>
+            </div>
+          </div>
+
         </div>
 
       </div>
+    </section>
 
-      <div class="footer-bottom">
-        <div>
-          &copy; 2026 Ilādṛṣṭi Earth Observation Project. Released under the MIT License.
+    <!-- =======================================================================
+         5. BOTTOM RIGHT - ABLATION & ANALYTICS (BAR CHARTS & LISTS)
+         ======================================================================= -->
+    <section class="soc-card analytics-card">
+      <div class="corner-flourish br"></div>
+
+      <!-- Subtle Mandala Watermark -->
+      <svg class="mandala-watermark bottom-left" viewBox="0 0 400 400">
+        <use href="#master-mandala"/>
+      </svg>
+
+      <div class="card-header">
+        <div class="card-title-group">
+          <svg class="card-icon-svg text-purple" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+          </svg>
+          <span class="card-title">Ablation &amp; Diagnostics</span>
         </div>
-        <div>
-          Architecture: Transfer-Adapted ResNet-50 U-Net &bull; Latency: 36.4 FPS &bull; Resolution: 10m GSD
-        </div>
+        <span class="card-badge badge-purple">+23.0% GAIN</span>
       </div>
+
+      <div class="card-body">
+        
+        <!-- Horizontal Bar Chart: Model Comparisons -->
+        <div class="chart-section">
+          <div class="sub-section-title">Ablation Study (mIoU / Dice)</div>
+          
+          <div class="bar-chart-container">
+            
+            <!-- Model 1: Baseline BCE (RGB) -->
+            <div class="bar-item">
+              <div class="bar-label-row">
+                <span class="bar-name">Baseline BCE (RGB)</span>
+                <span class="bar-metrics-val">IoU: 0.612 | Dice: 0.759</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bce" style="width: 61.2%;"></div>
+              </div>
+            </div>
+
+            <!-- Model 2: Baseline BCE (RGB + NIR) -->
+            <div class="bar-item">
+              <div class="bar-label-row">
+                <span class="bar-name">Baseline BCE (RGB + NIR)</span>
+                <span class="bar-metrics-val">IoU: 0.684 | Dice: 0.812</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill bce-nir" style="width: 68.4%;"></div>
+              </div>
+            </div>
+
+            <!-- Model 3: Dice Loss (RGB + NIR) -->
+            <div class="bar-item">
+              <div class="bar-label-row">
+                <span class="bar-name">Dice Loss (RGB + NIR)</span>
+                <span class="bar-metrics-val">IoU: 0.741 | Dice: 0.851</span>
+              </div>
+              <div class="bar-track">
+                <div class="bar-fill dice" style="width: 74.1%;"></div>
+              </div>
+            </div>
+
+            <!-- Model 4: Focal-Tversky (RGB + NIR) [Ilādṛṣṭi] -->
+            <div class="bar-item">
+              <div class="bar-label-row">
+                <span class="bar-name" style="color: var(--neon-cyan); font-weight:700;">Focal-Tversky (RGB + NIR)</span>
+                <span class="bar-metrics-val text-cyan">IoU: 0.842 | Dice: 0.914</span>
+              </div>
+              <div class="bar-track" style="height: 9px;">
+                <div class="bar-fill ftl-winner" style="width: 84.2%;"></div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- AI Insights & Limitations Styled List -->
+        <div class="sub-section-title">AI Insights &amp; Edge Limitations</div>
+        <div class="insights-list">
+          
+          <div class="insight-item critical">
+            <div class="insight-head">
+              <span class="insight-title">Shadow / Cloud Confusion in Region B</span>
+              <span class="severity-tag critical">CRITICAL</span>
+            </div>
+            <p class="insight-desc">
+              Dense cumulus shadows on steep northern slopes attenuate NIR reflectance, mimicking burn scars. Mitigated via NBR-2 differential ratioing.
+            </p>
+          </div>
+
+          <div class="insight-item moderate">
+            <div class="insight-head">
+              <span class="insight-title">Topographic Occlusion at Ridge 14</span>
+              <span class="severity-tag moderate">MODERATE</span>
+            </div>
+            <p class="insight-desc">
+              Solar incidence angle (&lt; 28°) causes self-shadowing on leeward terrain. DEM slope-aspect cosine normalization applied during preprocessing.
+            </p>
+          </div>
+
+          <div class="insight-item low">
+            <div class="insight-head">
+              <span class="insight-title">Sub-Pixel Spot Fires (&lt; 10m GSD)</span>
+              <span class="severity-tag low">LOW</span>
+            </div>
+            <p class="insight-desc">
+              Smoldering embers smaller than single Sentinel-2 pixel trigger borderline logits (0.42-0.52). Resolved by connected-component clustering.
+            </p>
+          </div>
+
+          <div class="insight-item mitigated">
+            <div class="insight-head">
+              <span class="insight-title">Controlled Agricultural Burning</span>
+              <span class="severity-tag mitigated">MITIGATED</span>
+            </div>
+            <p class="insight-desc">
+              Regular geometric field boundaries successfully discriminated from chaotic wildfire frontiers using spatial perimeter fractal dimension analysis.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- =========================================================================
+       FOOTER STATUS STRIP
+       ========================================================================= -->
+  <footer class="soc-footer">
+    <div class="footer-left">
+      <span>SYSTEM ARCHITECTURE: <span class="footer-highlight">RESNET-50 4-BAND U-NET</span></span>
+      <span>LOSS FUNCTION: <span class="text-saffron">FOCAL-TVERSKY (ALPHA=0.7, BETA=0.3, GAMMA=1.33)</span></span>
+      <span>REPRODUCIBILITY: <span class="footer-highlight">DETERMINISTIC SEED 42</span></span>
+    </div>
+    <div class="footer-right">
+      <span>SPECTRAL RESOLUTION: <span class="text-gold">4 BANDS (B2, B3, B4, B8)</span></span>
+      <span>FRAMEWORK: <span class="footer-highlight">PYTORCH 2.2 + CUDA 12.2</span></span>
+      <span>MISSION STATUS: <span class="text-online">OPERATIONAL</span></span>
     </div>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/data.js"></script>
-  <script src="js/slider.js"></script>
-  <script src="js/charts.js"></script>
-  <script src="js/app.js"></script>
+  <!-- =========================================================================
+       PURE VANILLA JAVASCRIPT CONTROLLER
+       Interactive Before/After Split Slider, Auto-Scan Oscillator, Spectral Band
+       Switcher, Live UTC Clock & Telemetry Stepper Interactivity
+       ========================================================================= -->
+  <script>
+    (function() {
+      'use strict';
+
+      // -----------------------------------------------------------------------
+      // 1. LIVE UTC CLOCK
+      // -----------------------------------------------------------------------
+      const clockElement = document.getElementById('liveUtcClock');
+      function updateClock() {
+        const now = new Date();
+        const hrs = String(now.getUTCHours()).padStart(2, '0');
+        const mins = String(now.getUTCMinutes()).padStart(2, '0');
+        const secs = String(now.getUTCSeconds()).padStart(2, '0');
+        if (clockElement) {
+          clockElement.textContent = hrs + ':' + mins + ':' + secs + ' UTC';
+        }
+      }
+      setInterval(updateClock, 1000);
+      updateClock();
+
+      // -----------------------------------------------------------------------
+      // 2. INTERACTIVE BEFORE/AFTER IMAGE SLIDER
+      // -----------------------------------------------------------------------
+      const viewport = document.getElementById('sliderViewport');
+      const divider = document.getElementById('sliderDivider');
+      const clipWrap = document.getElementById('sliderClipWrap');
+      const ratioBadge = document.getElementById('sliderRatioBadge');
+      const percentLabel = document.getElementById('splitPercentLabel');
+
+      let isDragging = false;
+      let currentSplit = 50.0; // Percentage
+
+      function updateSliderPosition(percent) {
+        currentSplit = Math.max(2, Math.min(98, percent));
+        const formatted = currentSplit.toFixed(1) + '%';
+        divider.style.left = formatted;
+        clipWrap.style.clipPath = 'polygon(0 0, ' + formatted + ' 0, ' + formatted + ' 100%, 0 100%)';
+        if (ratioBadge) ratioBadge.textContent = 'SPLIT: ' + Math.round(currentSplit) + '%';
+        if (percentLabel) percentLabel.textContent = Math.round(currentSplit) + '%';
+      }
+
+      function handleMove(clientX) {
+        const rect = viewport.getBoundingClientRect();
+        const offsetX = clientX - rect.left;
+        const percent = (offsetX / rect.width) * 100;
+        updateSliderPosition(percent);
+      }
+
+      viewport.addEventListener('mousedown', function(e) {
+        isDragging = true;
+        stopAutoScan();
+        handleMove(e.clientX);
+      });
+
+      window.addEventListener('mousemove', function(e) {
+        if (!isDragging) return;
+        handleMove(e.clientX);
+      });
+
+      window.addEventListener('mouseup', function() {
+        isDragging = false;
+      });
+
+      // Touch Screen Support
+      viewport.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        stopAutoScan();
+        if (e.touches && e.touches[0]) {
+          handleMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        if (e.touches && e.touches[0]) {
+          handleMove(e.touches[0].clientX);
+        }
+      }, { passive: true });
+
+      window.addEventListener('touchend', function() {
+        isDragging = false;
+      });
+
+      // Keyboard arrow control
+      window.addEventListener('keydown', function(e) {
+        if (e.key === 'ArrowLeft') {
+          stopAutoScan();
+          updateSliderPosition(currentSplit - 2);
+        } else if (e.key === 'ArrowRight') {
+          stopAutoScan();
+          updateSliderPosition(currentSplit + 2);
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // 3. AUTO-SCAN OSCILLATOR
+      // -----------------------------------------------------------------------
+      let autoScanActive = false;
+      let scanDirection = 1;
+      let scanAnimationId = null;
+      const scanBtn = document.getElementById('btnAutoScanToggle');
+      const scanStatusText = document.getElementById('scanStatusText');
+
+      function scanStep() {
+        if (!autoScanActive) return;
+        currentSplit += 0.35 * scanDirection;
+        if (currentSplit >= 88) {
+          scanDirection = -1;
+        } else if (currentSplit <= 12) {
+          scanDirection = 1;
+        }
+        updateSliderPosition(currentSplit);
+        scanAnimationId = requestAnimationFrame(scanStep);
+      }
+
+      function startAutoScan() {
+        autoScanActive = true;
+        scanBtn.style.background = 'rgba(0, 243, 255, 0.25)';
+        scanBtn.style.borderColor = 'var(--neon-cyan)';
+        scanStatusText.textContent = 'SCANNING...';
+        scanStep();
+      }
+
+      function stopAutoScan() {
+        if (!autoScanActive) return;
+        autoScanActive = false;
+        if (scanAnimationId) cancelAnimationFrame(scanAnimationId);
+        scanBtn.style.background = '';
+        scanBtn.style.borderColor = '';
+        scanStatusText.textContent = 'AUTO SCAN';
+      }
+
+      scanBtn.addEventListener('click', function() {
+        if (autoScanActive) {
+          stopAutoScan();
+        } else {
+          startAutoScan();
+        }
+      });
+
+      // -----------------------------------------------------------------------
+      // 4. SPECTRAL BAND SELECTOR
+      // -----------------------------------------------------------------------
+      const bandButtons = document.querySelectorAll('.band-btn');
+      const terrainBaseRect = document.getElementById('terrainBaseRect');
+      const smokePlume = document.getElementById('smokePlumeGroup');
+      const activeModeLabel = document.getElementById('activeModeLabel');
+
+      bandButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          bandButtons.forEach(function(b) { b.classList.remove('active'); });
+          this.classList.add('active');
+          const band = this.getAttribute('data-band');
+
+          if (band === 'rgb') {
+            terrainBaseRect.setAttribute('fill', 'url(#topoSlopeGrad)');
+            smokePlume.style.opacity = '1.0';
+            activeModeLabel.textContent = 'RGB TRUE COLOR vs AI MASK';
+          } else if (band === 'nir') {
+            terrainBaseRect.setAttribute('fill', '#40131d');
+            smokePlume.style.opacity = '0.55';
+            activeModeLabel.textContent = 'NIR CIR (B8-B4-B3) vs AI MASK';
+          } else if (band === 'swir') {
+            terrainBaseRect.setAttribute('fill', '#1a100d');
+            smokePlume.style.opacity = '0.12'; // Smoke transparent under SWIR!
+            activeModeLabel.textContent = 'SWIR PENETRATION vs AI MASK';
+          }
+        });
+      });
+
+      // -----------------------------------------------------------------------
+      // 5. INFERENCE FLOW TIMELINE (INTERACTIVE STEPPER)
+      // -----------------------------------------------------------------------
+      const stepperSteps = document.querySelectorAll('.stepper-step');
+      stepperSteps.forEach(function(step) {
+        step.addEventListener('click', function() {
+          stepperSteps.forEach(function(s) { s.classList.remove('active'); });
+          this.classList.add('active');
+        });
+      });
+
+      // -----------------------------------------------------------------------
+      // 6. TELEMETRY RESET ACTION
+      // -----------------------------------------------------------------------
+      const resetBtn = document.getElementById('btnTelemetryReset');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          stopAutoScan();
+          updateSliderPosition(50.0);
+          bandButtons[0].click();
+          stepperSteps[0].click();
+        });
+      }
+
+      // Initial layout setup
+      updateSliderPosition(50.0);
+
+    })();
+  </script>
 </body>
 </html>
