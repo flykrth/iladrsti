@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Github, Satellite, ShieldCheck, Terminal } from "lucide-react";
+import { MandalaBadge } from "./Mandala";
 
 export default function Footer() {
   return (
@@ -8,7 +9,8 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
             <div className="text-xl font-extrabold text-white flex items-center gap-2 mb-2">
-              Ilādṛṣṭi <span className="text-brand-pink text-sm font-normal">इलादृष्टि</span>
+              <MandalaBadge size={26} />
+              Ilādṛṣṭi <span className="text-[#d4af37] text-sm font-normal">इलादृष्टि</span>
             </div>
             <p className="text-xs sm:text-sm text-slate-400 max-w-xl leading-relaxed">
               Multispectral Semantic Segmentation for Wildfire Progression.<br />

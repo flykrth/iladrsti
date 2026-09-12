@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Radio, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
+import { MandalaBadge } from "./Mandala";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -50,13 +51,11 @@ export default function Navbar() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4">
         {/* Brand */}
-        <Link href="#hero" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-pink to-brand-purple flex items-center justify-center shadow-lg shadow-brand-pink/30 group-hover:scale-105 transition-transform">
-            <Radio className="w-5 h-5 text-white" />
-          </div>
+        <Link href="#hero" className="flex items-center gap-3 group shrink-0">
+          <MandalaBadge size={40} className="group-hover:scale-105 transition-transform" />
           <div className="flex flex-col">
             <div className="text-lg font-extrabold tracking-tight text-white flex items-center gap-1.5">
-              Ilādṛṣṭi <span className="text-brand-pink text-xs font-normal">इलादृष्टि</span>
+              Ilādṛṣṭi <span className="text-[#d4af37] text-xs font-normal">इलादृष्टि</span>
             </div>
             <span className="text-[10px] uppercase font-bold tracking-widest text-slate-400">
               Multispectral Wildfire AI
@@ -65,12 +64,12 @@ export default function Navbar() {
         </Link>
 
         {/* Desktop Navigation Links */}
-        <ul className="hidden md:flex items-center gap-1 lg:gap-2">
+        <ul className="hidden md:flex items-center gap-1 lg:gap-2 overflow-x-auto no-scrollbar">
           {navLinks.map((link) => (
-            <li key={link.id}>
+            <li key={link.id} className="shrink-0">
               <Link
                 href={link.href}
-                className={`px-3.5 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all duration-200 ${
+                className={`px-3 py-1.5 rounded-full text-xs lg:text-sm font-semibold transition-all duration-200 whitespace-nowrap inline-block ${
                   activeSection === link.id
                     ? "bg-white/15 text-white border border-white/25 shadow-sm"
                     : "text-slate-300 hover:text-white hover:bg-white/5"

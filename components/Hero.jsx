@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Play, Code2, Sparkles, Activity, Cpu, Layers } from "lucide-react";
+import { MandalaWatermark, MandalaCorner } from "./Mandala";
 
 export default function Hero() {
   const kpis = [
@@ -44,18 +45,25 @@ export default function Hero() {
   ];
 
   return (
-    <section id="hero" className="pt-32 sm:pt-36 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="hero" className="pt-32 sm:pt-36 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="glass-panel p-6 sm:p-10 lg:p-14 relative text-center overflow-hidden border border-white/20 shadow-2xl"
       >
+        {/* Sacred Indian Mandala Corner Flourishes & Background Halo */}
+        <MandalaCorner position="tl" />
+        <MandalaCorner position="tr" />
+        <MandalaCorner position="bl" />
+        <MandalaCorner position="br" />
+        <MandalaWatermark position="center" size={540} opacity={0.07} />
+
         {/* Subtle accent border line on top */}
-        <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-brand-pink/80 to-transparent" />
+        <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-gradient-to-r from-transparent via-brand-pink/80 to-transparent z-10" />
 
         {/* Badges row */}
-        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap mb-6">
+        <div className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap mb-6 relative z-10">
           <span className="pill-badge track">
             <span className="pulse-dot fire" /> Deep Learning Hackathon @ Amrita
           </span>

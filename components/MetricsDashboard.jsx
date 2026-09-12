@@ -16,6 +16,7 @@ import {
 } from "recharts";
 import { BarChart3, TrendingUp, Table, Award, CheckCircle2 } from "lucide-react";
 import metricsData from "../public/data/metrics.json";
+import { MandalaWatermark, MandalaCorner } from "./Mandala";
 
 export default function MetricsDashboard() {
   const [activeTab, setActiveTab] = useState("charts"); // 'charts' | 'table'
@@ -116,8 +117,10 @@ export default function MetricsDashboard() {
         <div className="space-y-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Chart 1: Model Architecture Benchmark */}
-            <div className="glass-card p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="glass-card p-6 relative overflow-hidden">
+              <MandalaCorner position="tl" />
+              <MandalaWatermark position="bottom-right" size={220} opacity={0.04} />
+              <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-2">
                   <Award className="w-5 h-5 text-brand-pink" />
                   <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">
@@ -126,11 +129,11 @@ export default function MetricsDashboard() {
                 </div>
                 <span className="pill-badge track">Dice &amp; IoU</span>
               </div>
-              <p className="text-xs text-slate-300 mb-6">
+              <p className="text-xs text-slate-300 mb-6 relative z-10">
                 Comparative test metrics comparing 4-Band BCE Baseline vs 3-Band and 4-Band Focal-Tversky configurations.
               </p>
 
-              <div className="h-72 w-full">
+              <div className="h-72 w-full relative z-10">
                 {mounted && (
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={benchmarkChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
@@ -152,8 +155,10 @@ export default function MetricsDashboard() {
             </div>
 
             {/* Chart 2: Spectral Gain Breakdown */}
-            <div className="glass-card p-6">
-              <div className="flex items-center justify-between mb-4">
+            <div className="glass-card p-6 relative overflow-hidden">
+              <MandalaCorner position="tr" />
+              <MandalaWatermark position="bottom-left" size={220} opacity={0.04} />
+              <div className="flex items-center justify-between mb-4 relative z-10">
                 <div className="flex items-center gap-2">
                   <TrendingUp className="w-5 h-5 text-brand-emerald" />
                   <h3 className="text-base sm:text-lg font-bold text-white tracking-tight">

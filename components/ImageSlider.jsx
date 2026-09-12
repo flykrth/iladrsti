@@ -4,6 +4,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import Image from "next/image";
 import { Play, Pause, ChevronLeft, ChevronRight, Eye, ShieldAlert, Mountain, CloudRain, Flame, Activity } from "lucide-react";
 import metricsData from "../public/data/metrics.json";
+import { MandalaWatermark, MandalaCorner } from "./Mandala";
 
 export default function ImageSlider() {
   const scenes = metricsData.scenes;
@@ -169,6 +170,11 @@ export default function ImageSlider() {
       </div>
 
       <div className="glass-panel p-4 sm:p-6 lg:p-8 relative overflow-hidden shadow-2xl">
+        {/* Cultural Mandala Flourishes */}
+        <MandalaCorner position="tl" />
+        <MandalaCorner position="br" />
+        <MandalaWatermark position="bottom-left" size={320} opacity={0.05} />
+
         {/* Controls Toolbar */}
         <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 mb-6">
           {/* Scene Selector */}

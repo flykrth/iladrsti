@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { AlertTriangle, CloudRain, Mountain, Wind } from "lucide-react";
+import { MandalaWatermark, MandalaCorner } from "./Mandala";
 
 export default function Limitations() {
   const failures = [
@@ -80,9 +81,10 @@ export default function Limitations() {
           return (
             <div
               key={item.title}
-              className="glass-card p-6 flex flex-col justify-between border-white/15 hover:border-red-400/40"
+              className="glass-card p-6 flex flex-col justify-between border-white/15 hover:border-red-400/40 relative overflow-hidden"
             >
-              <div>
+              <MandalaWatermark position="bottom-right" size={180} opacity={0.04} />
+              <div className="relative z-10">
                 <div className="flex items-center justify-between gap-2 mb-3">
                   <div className="p-2 rounded-lg bg-white/10 text-white">
                     <Icon className="w-4 h-4" />

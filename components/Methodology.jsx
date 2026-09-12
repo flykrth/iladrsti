@@ -3,9 +3,10 @@
 import { useMemo } from "react";
 import katex from "katex";
 import { Layers, Network, Zap, BookOpen, AlertCircle } from "lucide-react";
+import { MandalaWatermark, MandalaCorner } from "./Mandala";
 
 export default function Methodology() {
-  // Render KaTeX equations safely
+  // Render KaTeX equations safely and compactly to fit within cards without horizontal scrollbars
   const conv1FormulaHtml = useMemo(() => {
     try {
       return katex.renderToString(
@@ -20,7 +21,7 @@ export default function Methodology() {
   const ftlFormulaHtml = useMemo(() => {
     try {
       return katex.renderToString(
-        "FTL = (1 - TI)^\\gamma = \\left(1 - \\frac{TP + \\epsilon}{TP + \\alpha FN + \\beta FP + \\epsilon}\\right)^{1.333}",
+        "\\mathrm{FTL} = (1 - \\mathrm{TI})^\\gamma = (1 - \\mathrm{TI})^{1.333}",
         { displayMode: true, throwOnError: false }
       );
     } catch {
@@ -31,18 +32,21 @@ export default function Methodology() {
   const tiFormulaHtml = useMemo(() => {
     try {
       return katex.renderToString(
-        "TI = \\frac{\\sum_{i} p_i y_i + \\epsilon}{\\sum_{i} p_i y_i + 0.7 \\sum_{i} (1 - p_i) y_i + 0.3 \\sum_{i} p_i (1 - y_i) + \\epsilon}",
+        "\\mathrm{TI} = \\frac{\\mathrm{TP} + \\epsilon}{\\mathrm{TP} + 0.7\\,\\mathrm{FN} + 0.3\\,\\mathrm{FP} + \\epsilon}",
         { displayMode: true, throwOnError: false }
       );
     } catch {
-      return "TI = (TP + ε) / (TP + α·FN + β·FP + ε)";
+      return "TI = (TP + ε) / (TP + 0.7·FN + 0.3·FP + ε)";
     }
   }, []);
 
   return (
-    <section id="methodology" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="methodology" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
+      {/* Ambient Section Background Mandala Watermark */}
+      <MandalaWatermark position="center" size={680} opacity={0.03} />
+
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-14">
+      <div className="text-center max-w-3xl mx-auto mb-14 relative z-10">
         <span className="pill-badge track mb-3">Methodology & Deep Learning Architecture</span>
         <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-2 mb-4">
           ResNet-50 U-Net & Focal-Tversky Loss
@@ -52,10 +56,15 @@ export default function Methodology() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative z-10">
         {/* Left Column: Symmetrical 5-Stage U-Net Architecture */}
-        <div className="lg:col-span-7 glass-card p-6 sm:p-8">
-          <div className="flex items-center gap-3 mb-4">
+        <div className="lg:col-span-7 glass-card p-6 sm:p-8 relative overflow-hidden">
+          {/* Indian Mandala Cultural Elements */}
+          <MandalaCorner position="tl" />
+          <MandalaCorner position="br" />
+          <MandalaWatermark position="bottom-right" size={280} opacity={0.06} />
+
+          <div className="flex items-center gap-3 mb-4 relative z-10">
             <div className="p-2 rounded-lg bg-brand-pink/20 text-brand-pink border border-brand-pink/30">
               <Network className="w-6 h-6" />
             </div>
@@ -64,13 +73,13 @@ export default function Methodology() {
             </h3>
           </div>
 
-          <p className="text-slate-300 text-sm leading-relaxed mb-6">
+          <p className="text-slate-300 text-sm leading-relaxed mb-6 relative z-10">
             Standard optical segmentation models fail when wildfires occupy less than{" "}
             <strong className="text-white font-semibold">5%</strong> of a satellite tile. Ilādṛṣṭi couples a deep{" "}
             <strong className="text-white font-semibold">ResNet-50 encoder</strong> with a customized 5-stage expansive decoder to retain fine perimeter details.
           </p>
 
-          <div className="space-y-4 mb-6">
+          <div className="space-y-4 mb-6 relative z-10">
             {/* Step 1 */}
             <div className="flex items-start gap-4 p-4 rounded-xl bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] transition-colors">
               <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-brand-pink/30 to-brand-purple/30 border border-brand-pink/50 text-brand-pink font-extrabold text-sm flex items-center justify-center shrink-0">
@@ -118,20 +127,25 @@ export default function Methodology() {
           </div>
 
           {/* 4-Band Conv1 Adaptation Formula Callout */}
-          <div className="p-4 rounded-xl bg-slate-900/80 border border-brand-pink/30 shadow-inner">
+          <div className="p-4 rounded-xl bg-slate-900/80 border border-brand-pink/30 shadow-inner relative z-10">
             <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-brand-pink mb-2">
               <Zap className="w-4 h-4" /> Multispectral Weight Transfer Formula:
             </div>
             <div
-              className="text-xs sm:text-sm overflow-x-auto text-slate-100 py-1"
+              className="text-xs sm:text-sm overflow-x-auto no-scrollbar text-slate-100 py-1"
               dangerouslySetInnerHTML={{ __html: conv1FormulaHtml }}
             />
           </div>
         </div>
 
         {/* Right Column: Dedicated Focal-Tversky Loss Mathematics Block */}
-        <div className="lg:col-span-5 glass-panel p-6 sm:p-8 bg-gradient-to-b from-[#140e26]/80 to-[#231034]/70 border border-brand-pink/30 shadow-2xl relative">
-          <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/15">
+        <div className="lg:col-span-5 glass-panel p-6 sm:p-8 bg-gradient-to-b from-[#140e26]/80 to-[#231034]/70 border border-brand-pink/30 shadow-2xl relative overflow-hidden">
+          {/* Indian Mandala Cultural Elements */}
+          <MandalaCorner position="tr" />
+          <MandalaCorner position="bl" />
+          <MandalaWatermark position="top-right" size={260} opacity={0.08} />
+
+          <div className="flex items-center justify-between pb-4 mb-4 border-b border-white/15 relative z-10">
             <div className="flex items-center gap-2.5">
               <BookOpen className="w-5 h-5 text-brand-pink" />
               <h3 className="text-lg sm:text-xl font-extrabold text-white tracking-tight">
@@ -141,14 +155,14 @@ export default function Methodology() {
             <span className="pill-badge track">Phase 2 Objective</span>
           </div>
 
-          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6">
+          <p className="text-xs sm:text-sm text-slate-300 leading-relaxed mb-6 relative z-10">
             Standard Binary Cross-Entropy (BCE) treats every pixel equally, allowing overwhelming background pixels (95%) to suppress fire gradient updates. The <strong className="text-white font-semibold">Focal-Tversky Loss (FTL)</strong> penalizes False Negatives and concentrates learning on ambiguous boundary pixels.
           </p>
 
-          {/* Primary Formula Box */}
-          <div className="bg-black/60 border border-white/15 rounded-xl p-4 mb-4 text-center shadow-inner">
+          {/* Primary Formula Box - Clean and Compact with no-scrollbar */}
+          <div className="bg-black/60 border border-white/15 rounded-xl p-4 mb-4 text-center shadow-inner relative z-10">
             <div
-              className="overflow-x-auto text-sm sm:text-base text-white py-1"
+              className="overflow-x-auto no-scrollbar text-sm sm:text-base text-white py-1 flex justify-center items-center"
               dangerouslySetInnerHTML={{ __html: ftlFormulaHtml }}
             />
             <div className="text-[11px] font-semibold text-slate-400 mt-1 uppercase tracking-wider">
@@ -156,10 +170,10 @@ export default function Methodology() {
             </div>
           </div>
 
-          {/* Tversky Index Formula Box */}
-          <div className="bg-black/60 border border-white/15 rounded-xl p-4 mb-6 text-center shadow-inner">
+          {/* Tversky Index Formula Box - Clean and Compact with no-scrollbar */}
+          <div className="bg-black/60 border border-white/15 rounded-xl p-4 mb-6 text-center shadow-inner relative z-10">
             <div
-              className="overflow-x-auto text-xs sm:text-sm text-white py-1"
+              className="overflow-x-auto no-scrollbar text-xs sm:text-sm text-white py-1 flex justify-center items-center"
               dangerouslySetInnerHTML={{ __html: tiFormulaHtml }}
             />
             <div className="text-[11px] font-semibold text-slate-400 mt-1 uppercase tracking-wider">
@@ -168,7 +182,7 @@ export default function Methodology() {
           </div>
 
           {/* Parameter Breakdown Grid */}
-          <div className="grid grid-cols-3 gap-2.5 mb-6">
+          <div className="grid grid-cols-3 gap-2.5 mb-6 relative z-10">
             <div className="p-3 rounded-lg bg-white/[0.05] border border-white/10 text-center">
               <div className="text-sm font-black text-brand-pink font-mono">&alpha; = 0.7</div>
               <div className="text-[10px] text-slate-400 mt-1 leading-tight">
@@ -190,7 +204,7 @@ export default function Methodology() {
           </div>
 
           {/* Theoretical Guarantee Callout */}
-          <div className="p-3.5 rounded-xl bg-brand-pink/10 border border-brand-pink/25 flex items-start gap-2.5">
+          <div className="p-3.5 rounded-xl bg-brand-pink/10 border border-brand-pink/25 flex items-start gap-2.5 relative z-10">
             <AlertCircle className="w-5 h-5 text-brand-pink shrink-0 mt-0.5" />
             <p className="text-xs text-slate-200 leading-relaxed">
               <strong className="text-white font-semibold">Theoretical Guarantee:</strong> When &gamma; &gt; 1, easy confident predictions (TI &rarr; 1) generate near-zero loss, preventing background saturation and driving backpropagation updates into elusive firebreak margins.
