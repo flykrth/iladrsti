@@ -1,5 +1,6 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { MandalaBackground } from "@/components/Mandala";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -45,12 +46,9 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
         />
       </head>
-      <body className="bg-background-deep font-sans text-slate-100 antialiased selection:bg-brand-pink selection:text-white">
-        {/* Vibrant Animated Aurora Mesh Gradient Background */}
-        <div className="aurora-bg">
-          <div className="aurora-mesh" />
-          <div className="aurora-noise" />
-        </div>
+      <body className="bg-[#faf8f5] font-sans text-slate-800 antialiased selection:bg-[#d4af37] selection:text-white min-h-screen relative">
+        {/* Sacred Indian Mandala Ambient Background in Royal Gold */}
+        <MandalaBackground />
 
         {children}
       </body>

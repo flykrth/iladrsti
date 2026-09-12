@@ -157,28 +157,28 @@ export default function ImageSlider() {
   ];
 
   return (
-    <section id="interactive-demo" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <section id="interactive-demo" className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto relative">
       {/* Section Header */}
-      <div className="text-center max-w-3xl mx-auto mb-10">
+      <div className="text-center max-w-3xl mx-auto mb-10 relative z-10">
         <span className="pill-badge track mb-3">Interactive Demonstration</span>
-        <h2 className="text-3xl sm:text-4xl font-black text-white tracking-tight mt-2 mb-4">
-          Multispectral Inference & Comparison Slider
+        <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mt-2 mb-4">
+          Multispectral Inference &amp; Comparison Slider
         </h2>
-        <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+        <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
           Drag the interactive divider to compare raw Sentinel-2 satellite inputs directly with Ilādṛṣṭi&apos;s predicted wildfire perimeter masks.
         </p>
       </div>
 
-      <div className="glass-panel p-4 sm:p-6 lg:p-8 relative overflow-hidden shadow-2xl">
+      <div className="glass-panel p-4 sm:p-6 lg:p-8 relative overflow-hidden shadow-xl bg-white/92 border border-[#d4af37]/35">
         {/* Cultural Mandala Flourishes */}
         <MandalaCorner position="tl" />
         <MandalaCorner position="br" />
-        <MandalaWatermark position="bottom-left" size={320} opacity={0.05} />
+        <MandalaWatermark position="bottom-left" size={340} opacity={0.12} />
 
         {/* Controls Toolbar */}
-        <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 mb-6">
+        <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 mb-6 relative z-10">
           {/* Scene Selector */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 xl:pb-0 scrollbar-none">
+          <div className="flex items-center gap-2 overflow-x-auto pb-2 xl:pb-0 no-scrollbar">
             {scenes.map((scene, idx) => {
               const Icon = sceneIcons[idx] || Flame;
               const isSelected = selectedSceneIndex === idx;
@@ -188,15 +188,15 @@ export default function ImageSlider() {
                 <button
                   key={scene.id}
                   onClick={() => setSelectedSceneIndex(idx)}
-                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 ${
+                  className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap shrink-0 shadow-xs ${
                     isSelected
                       ? isFailure
-                        ? "bg-red-500/25 border border-red-500/60 text-red-300 shadow-lg shadow-red-500/20"
-                        : "bg-brand-pink/25 border border-brand-pink/60 text-white shadow-lg shadow-brand-pink/20"
-                      : "bg-white/[0.06] border border-white/15 text-slate-300 hover:bg-white/[0.12] hover:text-white"
+                        ? "bg-red-50 border border-red-400 text-red-700 shadow-sm"
+                        : "bg-[#d4af37] border border-[#d4af37] text-white shadow-md"
+                      : "bg-amber-50/50 border border-[#d4af37]/30 text-slate-700 hover:bg-amber-50/80 hover:text-slate-900"
                   }`}
                 >
-                  <Icon className={`w-3.5 h-3.5 ${isSelected ? (isFailure ? "text-red-400" : "text-brand-pink") : "text-slate-400"}`} />
+                  <Icon className={`w-3.5 h-3.5 ${isSelected ? (isFailure ? "text-red-700" : "text-white") : "text-[#b45309]"}`} />
                   {scene.name.replace("Failure Case: ", "Failure: ")}
                 </button>
               );
@@ -205,7 +205,7 @@ export default function ImageSlider() {
 
           {/* Layer Mode & Auto Scan Actions */}
           <div className="flex items-center gap-2.5 flex-wrap justify-between xl:justify-end">
-            <div className="flex items-center gap-1.5 bg-black/40 p-1 rounded-xl border border-white/15 flex-wrap">
+            <div className="flex items-center gap-1.5 bg-amber-50/60 p-1 rounded-xl border border-[#d4af37]/35 flex-wrap">
               {[
                 { id: "rgb_vs_pred", label: "RGB vs Prediction" },
                 { id: "nir_vs_pred", label: "NIR (CIR) vs Pred" },
@@ -217,8 +217,8 @@ export default function ImageSlider() {
                   onClick={() => setMode(m.id)}
                   className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                     mode === m.id
-                      ? "bg-white/20 text-white shadow-sm"
-                      : "text-slate-400 hover:text-white"
+                      ? "bg-white text-[#854d0e] shadow-sm border border-[#d4af37]/35"
+                      : "text-slate-600 hover:text-slate-900"
                   }`}
                 >
                   {m.label}
@@ -228,10 +228,10 @@ export default function ImageSlider() {
 
             <button
               onClick={() => setIsScanning((prev) => !prev)}
-              className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 border shadow-sm ${
+              className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all flex items-center gap-2 shadow-xs ${
                 isScanning
-                  ? "bg-amber-500/25 border-amber-400/50 text-amber-300"
-                  : "bg-white/[0.08] border-white/20 text-slate-200 hover:bg-white/[0.15] hover:text-white"
+                  ? "bg-[#d4af37] text-white border-[#d4af37] shadow-md shadow-[#d4af37]/25"
+                  : "bg-white text-[#854d0e] border-[#d4af37]/45 hover:bg-amber-50/60"
               }`}
             >
               {isScanning ? (
@@ -250,13 +250,13 @@ export default function ImageSlider() {
         </div>
 
         {/* Before / After Split Slider Stage */}
-        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] max-h-[640px] rounded-2xl overflow-hidden select-none border border-white/20 shadow-2xl bg-black">
+        <div className="relative w-full aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] max-h-[640px] rounded-2xl overflow-hidden select-none border border-[#d4af37]/35 shadow-2xl bg-black">
           <div
             ref={containerRef}
             tabIndex={0}
             onPointerDown={handlePointerDown}
             onKeyDown={handleKeyDown}
-            className="relative w-full h-full cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-brand-pink/50"
+            className="relative w-full h-full cursor-ew-resize focus:outline-none focus:ring-2 focus:ring-[#d4af37]/50"
           >
             {/* Left & Right Floating Layer Badges */}
             <div className="absolute top-4 left-4 z-20 px-3 py-1.5 rounded-lg bg-black/75 backdrop-blur-md border border-white/20 text-[11px] font-bold text-white shadow-lg pointer-events-none">
@@ -297,10 +297,10 @@ export default function ImageSlider() {
 
             {/* Divider Line & Glowing Handle */}
             <div
-              className="absolute top-0 bottom-0 w-[2px] bg-white shadow-[0_0_12px_rgba(255,75,114,0.9)] z-30 pointer-events-none"
+              className="absolute top-0 bottom-0 w-[2px] bg-[#d4af37] shadow-[0_0_12px_rgba(212,175,55,0.8)] z-30 pointer-events-none"
               style={{ left: `${position}%` }}
             >
-              <div className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-[#0d0a1a] border-2 border-white shadow-xl flex items-center justify-center text-white">
+              <div className="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white border-2 border-[#d4af37] shadow-xl flex items-center justify-center text-[#854d0e]">
                 <ChevronLeft className="w-3.5 h-3.5 -mr-1" />
                 <ChevronRight className="w-3.5 h-3.5 -ml-1" />
               </div>
@@ -330,45 +330,45 @@ export default function ImageSlider() {
           </div>
         </div>
 
-        {/* Real-Time Telemetry HUD Overlay Bar */}
-        <div className="mt-4 p-4 rounded-xl bg-white/[0.05] border border-white/15 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+        {/* Real-Time Telemetry HUD Overlay Bar in White & Gold */}
+        <div className="mt-4 p-4 rounded-xl bg-amber-50/70 border border-[#d4af37]/35 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative z-10 shadow-xs">
           <div>
-            <h5 className="text-base font-bold text-white tracking-tight">
-              {currentScene.name} <span className="text-xs text-slate-400 font-mono">({currentScene.tile})</span>
+            <h5 className="text-base font-bold text-slate-900 tracking-tight">
+              {currentScene.name} <span className="text-xs text-[#854d0e] font-mono">({currentScene.tile})</span>
             </h5>
-            <p className="text-xs text-slate-300 mt-0.5">
+            <p className="text-xs text-slate-600 mt-0.5">
               {currentScene.location} &bull; {currentScene.description}
             </p>
           </div>
 
           <div className="flex items-center gap-3 sm:gap-6 shrink-0 flex-wrap">
             <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-slate-400">Scene Dice</div>
-              <div className="text-lg font-black text-brand-pink font-mono">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Scene Dice</div>
+              <div className="text-lg font-black text-[#b45309] font-mono">
                 {currentScene.metrics.dice.toFixed(4)}
               </div>
             </div>
             <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-slate-400">Mean IoU</div>
-              <div className="text-lg font-black text-brand-emerald font-mono">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Mean IoU</div>
+              <div className="text-lg font-black text-[#047857] font-mono">
                 {currentScene.metrics.iou.toFixed(4)}
               </div>
             </div>
             <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-slate-400">Precision</div>
-              <div className="text-lg font-black text-slate-100 font-mono">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Precision</div>
+              <div className="text-lg font-black text-slate-900 font-mono">
                 {(currentScene.metrics.precision * 100).toFixed(1)}%
               </div>
             </div>
             <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-slate-400">Recall</div>
-              <div className="text-lg font-black text-slate-100 font-mono">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Recall</div>
+              <div className="text-lg font-black text-slate-900 font-mono">
                 {(currentScene.metrics.recall * 100).toFixed(1)}%
               </div>
             </div>
             <div className="text-left">
-              <div className="text-[10px] uppercase font-bold text-slate-400">Burned Scar</div>
-              <div className="text-lg font-black text-brand-pink font-mono">
+              <div className="text-[10px] uppercase font-bold text-slate-500">Burned Scar</div>
+              <div className="text-lg font-black text-[#b45309] font-mono">
                 {currentScene.metrics.scarAreaPct.toFixed(1)}%
               </div>
             </div>

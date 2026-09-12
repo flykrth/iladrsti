@@ -4,17 +4,17 @@ import { MandalaBadge } from "./Mandala";
 
 export default function Footer() {
   return (
-    <footer className="mt-20 border-t border-white/15 bg-[#0b0817]/90 backdrop-blur-xl py-12 px-4 sm:px-6 lg:px-8">
+    <footer className="mt-20 border-t border-[#d4af37]/35 bg-[#fcfbfa]/95 backdrop-blur-xl py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto flex flex-col gap-8">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <div>
-            <div className="text-xl font-extrabold text-white flex items-center gap-2 mb-2">
+            <div className="text-xl font-extrabold text-slate-900 flex items-center gap-2 mb-2">
               <MandalaBadge size={26} />
-              Ilādṛṣṭi <span className="text-[#d4af37] text-sm font-normal">इलादृष्टि</span>
+              Ilādṛṣṭi <span className="text-[#854d0e] text-sm font-semibold">इलादृष्टि</span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-400 max-w-xl leading-relaxed">
+            <p className="text-xs sm:text-sm text-slate-600 max-w-xl leading-relaxed">
               Multispectral Semantic Segmentation for Wildfire Progression.<br />
-              Developed for <strong className="text-slate-200">Track 6: AI for Science &amp; Society</strong> at the Deep Learning Hackathon, Amrita Vishwa Vidyapeetham.
+              Developed for <strong className="text-slate-900 font-semibold">Track 6: AI for Science &amp; Society</strong> at the Deep Learning Hackathon, Amrita Vishwa Vidyapeetham.
             </p>
           </div>
 
@@ -40,7 +40,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
+        <div className="pt-6 border-t border-[#d4af37]/20 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-slate-500">
           <div>
             &copy; 2026 Ilādṛṣṭi Earth Observation Project. Released under the MIT License.
           </div>

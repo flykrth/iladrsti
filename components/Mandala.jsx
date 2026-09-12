@@ -12,10 +12,10 @@ import React from "react";
 export function MandalaSvg({
   size = 400,
   className = "",
-  primaryColor = "#d4af37", // Temple Gold
-  accentColor = "#ff8800",  // Indian Saffron
-  cyanColor = "#00f3ff",    // High-tech Neon Cyan
-  terracottaColor = "#e04b2b", // Terracotta Red
+  primaryColor = "#c59b27", // Rich Imperial Temple Gold
+  accentColor = "#d4af37",  // Radiant Gold
+  terracottaColor = "#b45309", // Warm Amber Gold
+  cyanColor = "#996515",    // Burnished Deep Gold
 }) {
   return (
     <svg
@@ -27,23 +27,23 @@ export function MandalaSvg({
       xmlns="http://www.w3.org/2000/svg"
     >
       <defs>
-        <radialGradient id="mandalaCenterGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={primaryColor} stopOpacity="0.4" />
-          <stop offset="70%" stopColor={accentColor} stopOpacity="0.1" />
+        <radialGradient id={`mandalaCenterGlow-${size}`} cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#fef3c7" stopOpacity="0.6" />
+          <stop offset="60%" stopColor="#d4af37" stopOpacity="0.2" />
           <stop offset="100%" stopColor="transparent" stopOpacity="0" />
         </radialGradient>
       </defs>
 
       {/* Subtle Central Radial Glow */}
-      <circle cx="200" cy="200" r="180" fill="url(#mandalaCenterGlow)" />
+      <circle cx="200" cy="200" r="180" fill={`url(#mandalaCenterGlow-${size})`} />
 
       {/* Concentric Outer Rings */}
-      <circle cx="200" cy="200" r="192" stroke={primaryColor} strokeWidth="1.2" strokeOpacity="0.75" />
-      <circle cx="200" cy="200" r="185" stroke={cyanColor} strokeWidth="1" strokeDasharray="3 3" strokeOpacity="0.8" />
-      <circle cx="200" cy="200" r="172" stroke={accentColor} strokeWidth="1.5" strokeOpacity="0.8" />
+      <circle cx="200" cy="200" r="192" stroke={primaryColor} strokeWidth="1.2" strokeOpacity="0.8" />
+      <circle cx="200" cy="200" r="185" stroke={accentColor} strokeWidth="1" strokeDasharray="3 3" strokeOpacity="0.85" />
+      <circle cx="200" cy="200" r="172" stroke={terracottaColor} strokeWidth="1.5" strokeOpacity="0.8" />
 
       {/* 32 Sunburst Perimeter Rays */}
-      <g stroke={primaryColor} strokeWidth="1.2" strokeOpacity="0.6">
+      <g stroke={primaryColor} strokeWidth="1.2" strokeOpacity="0.7">
         <line x1="200" y1="8" x2="200" y2="28" />
         <line x1="200" y1="372" x2="200" y2="392" />
         <line x1="8" y1="200" x2="28" y2="200" />
@@ -73,25 +73,25 @@ export function MandalaSvg({
       {/* 16-Point Geometric Star / Yantra Outer Layer */}
       <polygon
         points="200,35 215,85 265,55 245,105 305,95 270,140 335,150 285,185 345,200 285,215 335,250 270,260 305,305 245,295 265,345 215,315 200,365 185,315 135,345 155,295 95,305 130,260 65,250 115,215 55,200 115,185 65,150 130,140 95,95 155,105 135,55 185,85"
-        stroke={accentColor}
+        stroke={primaryColor}
         strokeWidth="1.2"
-        strokeOpacity="0.75"
+        strokeOpacity="0.8"
       />
 
       {/* Concentric Bead Ring */}
-      <circle cx="200" cy="200" r="140" stroke={primaryColor} strokeWidth="1" strokeOpacity="0.6" />
+      <circle cx="200" cy="200" r="140" stroke={accentColor} strokeWidth="1" strokeOpacity="0.7" />
       {[...Array(16)].map((_, i) => {
         const angle = (i * 360) / 16;
         const rad = (angle * Math.PI) / 180;
         const cx = 200 + 140 * Math.cos(rad);
         const cy = 200 + 140 * Math.sin(rad);
         return (
-          <circle key={`bead-${i}`} cx={cx} cy={cy} r="2.5" fill={primaryColor} opacity="0.8" />
+          <circle key={`bead-${i}`} cx={cx} cy={cy} r="2.5" fill={primaryColor} opacity="0.85" />
         );
       })}
 
       {/* 8-Petal Classical Indian Lotus */}
-      <g stroke={terracottaColor} strokeWidth="1.5" strokeOpacity="0.85">
+      <g stroke={terracottaColor} strokeWidth="1.5" strokeOpacity="0.9">
         <path d="M200,90 Q225,145 200,165 Q175,145 200,90 Z" />
         <path d="M200,310 Q225,255 200,235 Q175,255 200,310 Z" />
         <path d="M90,200 Q145,225 165,200 Q145,175 90,200 Z" />
@@ -105,33 +105,83 @@ export function MandalaSvg({
       {/* Sacred Shatkona (Interlocking Yantra Triangles) */}
       <polygon
         points="200,115 273,242 127,242"
-        stroke={cyanColor}
+        stroke={primaryColor}
         strokeWidth="1.2"
         strokeOpacity="0.85"
       />
       <polygon
         points="200,285 273,158 127,158"
-        stroke={cyanColor}
+        stroke={primaryColor}
         strokeWidth="1.2"
         strokeOpacity="0.85"
       />
 
       {/* Inner Lotus Core & Golden Bindu */}
-      <circle cx="200" cy="200" r="50" stroke={primaryColor} strokeWidth="1.5" strokeOpacity="0.9" />
-      <circle cx="200" cy="200" r="28" stroke={accentColor} strokeWidth="1" strokeDasharray="3 3" />
-      <circle cx="200" cy="200" r="14" fill={primaryColor} fillOpacity="0.3" stroke={primaryColor} strokeWidth="1.5" />
-      <circle cx="200" cy="200" r="4" fill={cyanColor} />
+      <circle cx="200" cy="200" r="50" stroke={accentColor} strokeWidth="1.5" strokeOpacity="0.9" />
+      <circle cx="200" cy="200" r="28" stroke={primaryColor} strokeWidth="1" strokeDasharray="3 3" />
+      <circle cx="200" cy="200" r="14" fill={accentColor} fillOpacity="0.35" stroke={primaryColor} strokeWidth="1.5" />
+      <circle cx="200" cy="200" r="4.5" fill="#996515" />
     </svg>
   );
 }
 
 /**
- * MandalaWatermark: Low-opacity background watermark for cards and sections
+ * MandalaBackground: Comprehensive Ambient Golden Mandala Art for Light Theme
+ * Renders multiple floating, rotating golden sacred geometry mandalas across the canvas
+ */
+export function MandalaBackground() {
+  return (
+    <div className="fixed inset-0 pointer-events-none select-none z-[-2] overflow-hidden bg-[#faf8f5]">
+      {/* Warm Ambient Golden Radiant Halos */}
+      <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[1200px] h-[700px] bg-radial from-[#fef3c7]/60 via-[#fde68a]/15 to-transparent blur-3xl opacity-70" />
+      <div className="absolute top-[40%] left-[-15%] w-[800px] h-[800px] bg-radial from-[#fde68a]/30 via-transparent to-transparent blur-3xl opacity-50" />
+      <div className="absolute bottom-[-10%] right-[-10%] w-[900px] h-[900px] bg-radial from-[#fef3c7]/60 via-transparent to-transparent blur-3xl opacity-60" />
+
+      {/* Giant Central Floating Mandala */}
+      <div className="absolute top-24 left-1/2 -translate-x-1/2 opacity-[0.14] animate-spin-very-slow">
+        <MandalaSvg size={860} />
+      </div>
+
+      {/* Top Right Radiating Mandala */}
+      <div className="absolute -top-32 -right-32 opacity-[0.11] animate-spin-very-slow" style={{ animationDirection: "reverse" }}>
+        <MandalaSvg size={680} />
+      </div>
+
+      {/* Mid Left Radiating Mandala */}
+      <div className="absolute top-[38%] -left-48 opacity-[0.10] animate-spin-very-slow">
+        <MandalaSvg size={640} />
+      </div>
+
+      {/* Mid Right Floating Mandala */}
+      <div className="absolute top-[62%] -right-40 opacity-[0.09] animate-spin-very-slow" style={{ animationDirection: "reverse" }}>
+        <MandalaSvg size={580} />
+      </div>
+
+      {/* Bottom Center Foundation Mandala */}
+      <div className="absolute -bottom-48 left-1/3 -translate-x-1/2 opacity-[0.12] animate-spin-very-slow">
+        <MandalaSvg size={780} />
+      </div>
+
+      {/* Subtle Sacred Geometry Grid Ticks */}
+      <div
+        className="absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage:
+            "linear-gradient(#b45309 1px, transparent 1px), linear-gradient(90deg, #b45309 1px, transparent 1px)",
+          backgroundSize: "64px 64px",
+        }}
+      />
+    </div>
+  );
+}
+
+/**
+ * MandalaWatermark: Card & section level golden watermark
  */
 export function MandalaWatermark({
   size = 320,
-  position = "center", // 'center' | 'top-right' | 'bottom-left' | 'top-left' | 'bottom-right'
-  opacity = 0.08,
+  position = "center",
+  opacity = 0.12,
   rotate = true,
   className = "",
 }) {
@@ -156,33 +206,32 @@ export function MandalaWatermark({
 }
 
 /**
- * MandalaCorner: Corner brackets with sacred geometry filigree
+ * MandalaCorner: Corner brackets with royal gold filigree
  */
 export function MandalaCorner({ position = "tl", className = "" }) {
   const cornerStyles = {
     tl: "top-0 left-0 border-t-2 border-l-2 border-[#d4af37] rounded-tl-sm",
-    tr: "top-0 right-0 border-t-2 border-r-2 border-[#00f3ff] rounded-tr-sm",
-    bl: "bottom-0 left-0 border-b-2 border-l-2 border-[#00f3ff] rounded-bl-sm",
-    br: "bottom-0 right-0 border-b-2 border-r-2 border-[#ff8800] rounded-br-sm",
+    tr: "top-0 right-0 border-t-2 border-r-2 border-[#c59b27] rounded-tr-sm",
+    bl: "bottom-0 left-0 border-b-2 border-l-2 border-[#c59b27] rounded-bl-sm",
+    br: "bottom-0 right-0 border-b-2 border-r-2 border-[#b45309] rounded-br-sm",
   };
 
   return (
     <div
       className={`absolute w-5 h-5 pointer-events-none z-10 transition-opacity ${cornerStyles[position] || ""} ${className}`}
     >
-      {/* Decorative inner corner tick */}
-      <span className="absolute w-1.5 h-1.5 bg-white/40 top-0.5 left-0.5" />
+      <span className="absolute w-1.5 h-1.5 bg-[#d4af37]/60 top-0.5 left-0.5 rounded-full" />
     </div>
   );
 }
 
 /**
- * MandalaBadge: Rotating header emblem for Brand & Section Badges
+ * MandalaBadge: Rotating header emblem for Brand & Section Badges in White & Gold
  */
-export function MandalaBadge({ size = 36, className = "" }) {
+export function MandalaBadge({ size = 38, className = "" }) {
   return (
     <div
-      className={`relative rounded-xl bg-gradient-to-tr from-[#161226] to-[#251838] border border-[#d4af37]/40 flex items-center justify-center shadow-lg shadow-[#d4af37]/15 shrink-0 overflow-hidden ${className}`}
+      className={`relative rounded-xl bg-gradient-to-tr from-[#fffdfa] via-[#fefbf0] to-[#fef6dc] border border-[#d4af37]/60 flex items-center justify-center shadow-md shadow-[#d4af37]/20 shrink-0 overflow-hidden ${className}`}
       style={{ width: size, height: size }}
     >
       <div className="animate-spin-very-slow w-full h-full flex items-center justify-center p-0.5">
