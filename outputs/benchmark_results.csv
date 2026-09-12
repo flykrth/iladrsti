@@ -1,2 +1,4 @@
 experiment_name,architecture,backbone,in_channels,loss_function,val_dice,val_iou,test_loss,test_dice,test_iou,seed,notes
-Mandatory Baseline,Standard U-Net,ResNet-50 (Pretrained),4,BCEWithLogitsLoss,0.6924,0.61,0.3781,0.7834,0.7044,42,Mandatory comparison floor (Seed locked 42)
+Mandatory Baseline,Standard U-Net,ResNet-50 (Pretrained),4,BCE,0.6924,0.61,0.3781,0.7834,0.7044,42,Evaluation on held-out test split (Seed locked 42)
+Ablation RGB (3-band),Standard U-Net,ResNet-50 (Pretrained),3,FOCAL_TVERSKY,0.4414,0.3653,0.5154,0.5027,0.4245,42,Evaluation on held-out test split (Seed locked 42)
+Ablation RGB+NIR (4-band),Standard U-Net,ResNet-50 (Pretrained),4,FOCAL_TVERSKY,0.484,0.4034,0.5102,0.5796,0.5013,42,Evaluation on held-out test split (Seed locked 42)

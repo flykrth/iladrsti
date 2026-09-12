@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ilādṛṣṭi (इलादृष्टि) — Multispectral Wildfire Semantic Segmentation Dashboard</title>
+  <meta name="description" content="Earth Observation Deep Learning Dashboard for Autonomous Multispectral Wildfire Detection & Burned Area Delineation using Sentinel-2 L2A Satellite Imagery." />
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
+
+  <!-- KaTeX for crisp mathematical formulas -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" />
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+
+  <!-- Chart.js for responsive benchmark and training visualizations -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+
+  <!-- Vibrant Animated Aurora Mesh Gradient Background -->
+  <div class="aurora-bg">
+    <div class="aurora-mesh"></div>
+    <div class="aurora-noise"></div>
+  </div>
+
+  <!-- ========================================================================
+       1. FIXED FROSTED GLASS TOP NAVIGATION BAR
+       ======================================================================== -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="#hero" class="nav-brand">
+        <div class="brand-icon">
+          <!-- Satellite / Radar Icon -->
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4.93 4.93a10 10 0 0 1 14.14 0"></path>
+            <path d="M7.76 7.76a6 6 0 0 1 8.48 0"></path>
+            <circle cx="12" cy="12" r="2"></circle>
+            <path d="m16 16 3 3"></path>
+            <path d="M12 18v3"></path>
+            <path d="m8 16-3 3"></path>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <div class="brand-title">
+            Ilādṛṣṭi <span class="brand-sanskrit">इलादृष्टि</span>
+          </div>
+          <span class="brand-tagline">Multispectral Wildfire AI</span>
+        </div>
+      </a>
+
+      <!-- Navigation Links -->
+      <ul class="nav-links" id="navLinksList">
+        <li><a href="#hero" class="nav-link active">Overview</a></li>
+        <li><a href="#methodology" class="nav-link">Architecture & Loss</a></li>
+        <li><a href="#interactive-demo" class="nav-link">Interactive Demo</a></li>
+        <li><a href="#metrics" class="nav-link">Metrics & Ablation</a></li>
+        <li><a href="#limitations" class="nav-link">Failure Analysis</a></li>
+      </ul>
+
+      <!-- Badges & Action -->
+      <div class="nav-badges">
+        <span class="pill-badge track">
+          <span class="pulse-dot fire"></span> Track 6: AI for Science & Society
+        </span>
+        <span class="pill-badge seed">
+          Seed 42 Locked
+        </span>
+        <button class="mobile-toggle" id="mobileNavToggle" aria-label="Toggle Navigation">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================
+       2. HERO SECTION & KPI METRICS HUD
+       ======================================================================== -->
+  <section id="hero" class="page-section hero-section">
+    <div class="container">
+      <div class="hero-card glass-panel">
+        
+        <div class="hero-badges-row">
+          <span class="pill-badge track">
+            <span class="pulse-dot fire"></span> Deep Learning Hackathon @ Amrita
+          </span>
+          <span class="pill-badge success">
+            European Space Agency Sentinel-2 L2A
+          </span>
+          <span class="pill-badge seed">
+            Deterministic Evaluation (N=40 Test)
+          </span>
+        </div>
+
+        <h1 class="hero-title">
+          <span class="gradient-text">Ilādṛṣṭi: Multispectral Wildfire</span><br />
+          Semantic Segmentation
+        </h1>
+
+        <div class="hero-etymology">
+          Sanskrit: <strong>इला</strong> (Earth) + <strong>दृष्टि</strong> (Vision) — Autonomous Earth Observation Intelligence
+        </div>
+
+        <p class="hero-mission">
+          Engineered for high-precision autonomous wildfire perimeter delineation and burned area scar mapping.
+          Combines <strong>4-Band Transfer Learning</strong> with <strong>Focal-Tversky Loss Optimization</strong> to penetrate dense smoke hazes,
+          resolve fine perimeter boundaries, and accelerate tactical disaster response and aerial retardant drops.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#interactive-demo" class="btn btn-primary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="5 3 19 12 5 21 5 3"></polygon>
+            </svg>
+            Launch Interactive Visual Demo
+          </a>
+          <a href="#methodology" class="btn btn-glass">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="4" y1="9" x2="20" y2="9"></line>
+              <line x1="4" y1="15" x2="20" y2="15"></line>
+              <line x1="10" y1="3" x2="8" y2="21"></line>
+              <line x1="16" y1="3" x2="14" y2="21"></line>
+            </svg>
+            Explore Focal-Tversky Math
+          </a>
+        </div>
+
+        <!-- Live KPI Telemetry Grid -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Test Dice Score (F1)</div>
+            <div class="kpi-value accent">0.7834</div>
+            <div class="kpi-sub">Held-out test split (N=40)</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Test Mean IoU</div>
+            <div class="kpi-value emerald">0.7044</div>
+            <div class="kpi-sub">Strict spatial Jaccard index</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">NIR Spectral Gain</div>
+            <div class="kpi-value cyan">+7.69%</div>
+            <div class="kpi-sub">+15.3% relative improvement</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Edge GPU Latency</div>
+            <div class="kpi-value">36.4 <span style="font-size: 1rem; font-weight: 500;">FPS</span></div>
+            <div class="kpi-sub">&lt; 50s per full Sentinel tile</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Model Precision</div>
+            <div class="kpi-value">ResNet-50</div>
+            <div class="kpi-sub">4-Band Transfer Adapted U-Net</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       3. METHODOLOGY & MATHEMATICAL FORMULATION SECTION
+       ======================================================================== -->
+  <section id="methodology" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Methodology & Deep Learning Architecture</div>
+        <h2 class="section-title">ResNet-50 U-Net & Focal-Tversky Loss</h2>
+        <p class="section-desc">
+          Resolving severe spatial class imbalance and smoke occlusion through multispectral weight transfer and gradient-focusing loss formulations.
+        </p>
+      </div>
+
+      <div class="methodology-grid">
+        
+        <!-- Left Column: Architecture Technical Breakdown -->
+        <div class="glass-card methodology-text">
+          <h3>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
+              <rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect>
+              <rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect>
+              <line x1="6" y1="6" x2="6.01" y2="6"></line>
+              <line x1="6" y1="18" x2="6.01" y2="18"></line>
+            </svg>
+            Symmetrical 5-Stage U-Net Architecture
+          </h3>
+          <p>
+            Standard optical segmentation models fail when wildfires occupy less than <strong>5%</strong> of a satellite tile.
+            Ilādṛṣṭi couples a deep <strong>ResNet-50 encoder</strong> with a customized 5-stage expansive decoder to retain fine perimeter details.
+          </p>
+
+          <div class="tech-step-list">
+            <div class="tech-step-item">
+              <div class="step-num">1</div>
+              <div class="step-content">
+                <h4>4-Band Initial Convolution Adaptation</h4>
+                <p>
+                  Adapts ImageNet-pretrained weights to 4-channel input (Red, Green, Blue, NIR). 
+                  The 4th NIR channel kernel is initialized via channel-wise mean averaging, preserving feature transfer without cold-start penalties.
+                </p>
+              </div>
+            </div>
+
+            <div class="tech-step-item">
+              <div class="step-num">2</div>
+              <div class="step-content">
+                <h4>Multi-Scale Residual Skip Connections</h4>
+                <p>
+                  High-resolution feature maps from ResNet stages ($C_1, C_2, C_3, C_4$) are routed directly into the decoder stages, restoring thin fire breaks and boundary perimeters lost during downsampling.
+                </p>
+              </div>
+            </div>
+
+            <div class="tech-step-item">
+              <div class="step-num">3</div>
+              <div class="step-content">
+                <h4>Expansive Decoder with Double Convolutions</h4>
+                <p>
+                  Each decoder stage applies bilinear upsampling followed by double $3\times 3$ convolutions, Batch Normalization, and ReLU activations, terminating in a $1\times 1$ logit projection head.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- 4-Band Conv1 Adaptation Formula Callout -->
+          <div class="conv-adaptation-box">
+            <div class="conv-adaptation-title">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+              </svg>
+              Multispectral Weight Transfer Formula:
+            </div>
+            <div id="katexConv" class="formula-display">
+              <!-- KaTeX or Fallback rendered below -->
+              W<sub>conv1</sub>[:, 3:4] &larr; &frac13; &sum;<sub>c=0</sub><sup>2</sup> W<sub>ImageNet</sub>[:, c:c+1]
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: Dedicated Focal-Tversky Loss Mathematics Block -->
+        <div class="math-block-card glass-panel">
+          <div class="math-header">
+            <div class="math-title">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+              </svg>
+              Focal-Tversky Loss Formulation
+            </div>
+            <span class="pill-badge track">Phase 2 Objective</span>
+          </div>
+
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1.2rem;">
+            Standard Binary Cross-Entropy (BCE) treats every pixel equally, allowing overwhelming background pixels (95%) to suppress fire gradient updates. 
+            The <strong>Focal-Tversky Loss ($FTL$)</strong> penalizes False Negatives and concentrates learning on ambiguous boundary pixels.
+          </p>
+
+          <!-- Primary Formula Container -->
+          <div class="math-formula-box">
+            <div id="katexFTL" class="formula-display">
+              FTL = (1 - TI)<sup>&gamma;</sup>
+            </div>
+            <div class="formula-caption">Non-Linear Boundary Focusing Objective</div>
+          </div>
+
+          <div class="math-formula-box" style="margin-bottom: 1.2rem;">
+            <div id="katexTI" class="formula-display" style="font-size: 1.05rem;">
+              TI = (TP + &epsilon;) / (TP + &alpha;&middot;FN + &beta;&middot;FP + &epsilon;)
+            </div>
+            <div class="formula-caption">Asymmetric Tversky Index Formulation</div>
+          </div>
+
+          <!-- Parameter Breakdown Grid -->
+          <div class="math-params-grid">
+            <div class="math-param-item">
+              <div class="param-symbol">&alpha; = 0.7</div>
+              <div class="param-desc">Heavy penalty on False Negatives (missed fire scars) for emergency response.</div>
+            </div>
+            <div class="math-param-item">
+              <div class="param-symbol">&beta; = 0.3</div>
+              <div class="param-desc">Moderate penalty on False Positives to avoid excessive false alarms.</div>
+            </div>
+            <div class="math-param-item">
+              <div class="param-symbol">&gamma; = 1.333</div>
+              <div class="param-desc">Focuses gradient steps on hard, ambiguous boundary contours.</div>
+            </div>
+          </div>
+
+          <div class="math-explanation">
+            <strong>Theoretical Guarantee:</strong> When &gamma; &gt; 1, easy confident predictions ($TI \to 1$) generate near-zero loss, 
+            preventing background saturation and driving backpropagation updates into elusive firebreak margins.
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       4. INTERACTIVE VISUAL DEMO (PROMINENT CENTRAL PANEL)
+       ======================================================================== -->
+  <section id="interactive-demo" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Interactive Demonstration</div>
+        <h2 class="section-title">Multispectral Inference & Comparison Slider</h2>
+        <p class="section-desc">
+          Drag the interactive divider to compare raw Sentinel-2 satellite inputs directly with Ilādṛṣṭi's predicted wildfire perimeter masks.
+        </p>
+      </div>
+
+      <div class="demo-card glass-panel interactive">
+        
+        <!-- Controls & Scene Selector Toolbar -->
+        <div class="demo-toolbar">
+          
+          <!-- Test Scenes Selector -->
+          <div class="demo-scenes-selector">
+            <button class="scene-btn active" data-scene-idx="0">
+              <span class="pulse-dot fire"></span> Mega-Fire Scar
+            </button>
+            <button class="scene-btn" data-scene-idx="1">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+              Smoke Penetration
+            </button>
+            <button class="scene-btn" data-scene-idx="2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 22 22 22"/></svg>
+              Canopy & Ridge
+            </button>
+            <button class="scene-btn" data-scene-idx="3">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+              Mosaic Fire
+            </button>
+            <button class="scene-btn failure" data-scene-idx="4">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              Failure: Cloud Cover
+            </button>
+            <button class="scene-btn failure" data-scene-idx="5">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+              Failure: Ravine Shadow
+            </button>
+          </div>
+
+          <!-- Layer Mode & Auto Scan Actions -->
+          <div style="display: flex; align-items: center; gap: 0.8rem; flex-wrap: wrap;">
+            
+            <div class="layer-modes">
+              <button class="mode-btn active" data-mode="rgb_vs_pred">RGB vs Prediction</button>
+              <button class="mode-btn" data-mode="nir_vs_pred">NIR (CIR) vs Prediction</button>
+              <button class="mode-btn" data-mode="pred_vs_gt">Pred vs Ground Truth</button>
+              <button class="mode-btn" data-mode="rgb_vs_confusion">Spatial Confusion Map</button>
+            </div>
+
+            <button class="btn-scan" id="btnAutoScan">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+              Auto Scan
+            </button>
+
+          </div>
+
+        </div>
+
+        <!-- Before / After Split Slider Stage -->
+        <div class="slider-stage-wrapper">
+          <div class="comparison-slider-box" id="comparisonBox">
+            
+            <!-- Left & Right Floating Layer Badges -->
+            <div class="layer-badge left" id="sliderLeftBadge">Raw Sentinel-2 RGB</div>
+            <div class="layer-badge right" id="sliderRightBadge">Predicted Wildfire Mask Overlay</div>
+
+            <!-- Before Image (Base / Underneath) -->
+            <img src="assets/samples/scene1_rgb.png" alt="Raw Satellite Input" class="slider-img before" id="sliderBeforeImg" />
+
+            <!-- After Image (Top / Clipped) -->
+            <img src="assets/samples/scene1_overlay.png" alt="Model Prediction Overlay" class="slider-img after" id="sliderAfterImg" />
+
+            <!-- Divider Line & Glowing Handle -->
+            <div class="slider-handle-line" id="sliderHandleLine">
+              <div class="slider-handle-button" id="sliderHandleBtn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                  <polyline points="9 18 3 12 9 6" style="display: none;"></polyline>
+                  <polyline points="9 6 15 12 9 18"></polyline>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Spatial Confusion Map Legend Overlay (Shown in Confusion Mode) -->
+            <div class="confusion-legend" id="confusionLegend">
+              <div class="legend-item">
+                <span class="legend-color tp"></span> True Positive (Hit)
+              </div>
+              <div class="legend-item">
+                <span class="legend-color fp"></span> False Positive (Commission)
+              </div>
+              <div class="legend-item">
+                <span class="legend-color fn"></span> False Negative (Omission)
+              </div>
+              <div class="legend-item">
+                <span class="legend-color tn"></span> Background (True Negative)
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- Real-Time Telemetry HUD Overlay Bar -->
+        <div class="demo-hud-bar">
+          <div class="hud-info">
+            <h5 id="hudSceneName">Mega-Fire Scar Complex (b__06_06.tif)</h5>
+            <p id="hudSceneDesc">Boreal Pine Forest • European Space Agency 10m Ground Sample Distance</p>
+          </div>
+          <div class="hud-metric">
+            <div class="hud-metric-label">Scene Dice</div>
+            <div class="hud-metric-val pink" id="hudDice">0.9317</div>
+          </div>
+          <div class="hud-metric">
+            <div class="hud-metric-label">Mean IoU</div>
+            <div class="hud-metric-val green" id="hudIoU">0.8747</div>
+          </div>
+          <div class="hud-metric">
+            <div class="hud-metric-label">Precision</div>
+            <div class="hud-metric-val" id="hudPrecision">95.3%</div>
+          </div>
+          <div class="hud-metric">
+            <div class="hud-metric-label">Recall</div>
+            <div class="hud-metric-val" id="hudRecall">92.3%</div>
+          </div>
+          <div class="hud-metric">
+            <div class="hud-metric-label">Burned Scar Area</div>
+            <div class="hud-metric-val pink" id="hudArea">74.0%</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       5. METRICS & ABLATION DASHBOARD
+       ======================================================================== -->
+  <section id="metrics" class="page-section">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-tag">Empirical Results & Spectral Ablation</div>
+        <h2 class="section-title">Benchmark Evaluation Dashboard</h2>
+        <p class="section-desc">
+          Strict deterministic evaluation across an isolated held-out test split (Seed locked at 42).
+          Comparing Mandatory Baseline (BCE) against Focal-Tversky across spectral configurations.
+        </p>
+      </div>
+
+      <!-- Tab Navigation -->
+      <div class="metrics-nav">
+        <button class="tab-btn active" data-tab-target="tabAllCharts">Visual Charts Grid</button>
+        <button class="tab-btn" data-tab-target="tabBenchmarkTable">Detailed Data Table</button>
+      </div>
+
+      <!-- Tab Pane 1: Charts Grid -->
+      <div id="tabAllCharts" class="tab-pane">
+        <div class="charts-grid">
+          
+          <!-- Chart 1: Model Benchmark Comparison -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ff4b72" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"></line>
+                  <line x1="12" y1="20" x2="12" y2="4"></line>
+                  <line x1="6" y1="20" x2="6" y2="14"></line>
+                </svg>
+                Model Architecture Benchmark (Held-out Test N=40)
+              </div>
+              <span class="pill-badge track">Dice &amp; IoU</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="benchmarkChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 2: Spectral Gain Breakdown -->
+          <div class="chart-card">
+            <div class="chart-header">
+              <div class="chart-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                  <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                </svg>
+                NIR Spectral Gain Breakdown (3-Band vs 4-Band)
+              </div>
+              <span class="pill-badge success">+7.69% Absolute Gain</span>
+            </div>
+            <div class="chart-container">
+              <canvas id="spectralChart"></canvas>
+            </div>
+          </div>
+
+          <!-- Chart 3: 15-Epoch Training Progression (Full Width) -->
+          <div class="chart-card full-width">
+            <div class="chart-header">
+              <div class="chart-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8b5cf6" stroke-width="2">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                15-Epoch Training Progression &amp; Validation Convergence
+              </div>
+              <span class="pill-badge seed">⭐ Best Model Checkpoint at Epoch 5</span>
+            </div>
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="trainingChart"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Tab Pane 2: Structured Benchmark Table -->
+      <div id="tabBenchmarkTable" class="tab-pane" style="display: none;">
+        <div class="benchmark-table-card glass-panel">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Experiment Name</th>
+                <th>Input Bands</th>
+                <th>Objective Loss Function</th>
+                <th>Val Dice (F1)</th>
+                <th>Val Mean IoU</th>
+                <th>Test Dice (F1)</th>
+                <th>Test Mean IoU</th>
+                <th>Test Loss</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="winner-row">
+                <td>
+                  <strong>Mandatory Baseline</strong>
+                  <span class="pill-badge track" style="margin-left: 0.5rem; font-size: 0.65rem;">Highest Overall</span>
+                </td>
+                <td>4 (RGB + NIR)</td>
+                <td>BCEWithLogitsLoss</td>
+                <td>0.6924</td>
+                <td>0.6100</td>
+                <td><span class="highlight-stat">0.7834</span></td>
+                <td><span class="highlight-stat">0.7044</span></td>
+                <td>0.3781</td>
+              </tr>
+              <tr>
+                <td><strong>Ablation Run 1 (3-Band)</strong></td>
+                <td>3 (RGB-Only)</td>
+                <td>Focal-Tversky Loss (&alpha;=0.7, &beta;=0.3, &gamma;=1.333)</td>
+                <td>0.4414</td>
+                <td>0.3653</td>
+                <td>0.5027</td>
+                <td>0.4245</td>
+                <td>0.5154</td>
+              </tr>
+              <tr>
+                <td><strong>Ablation Run 2 (4-Band)</strong></td>
+                <td>4 (RGB + NIR)</td>
+                <td>Focal-Tversky Loss (&alpha;=0.7, &beta;=0.3, &gamma;=1.333)</td>
+                <td>0.4840</td>
+                <td>0.4034</td>
+                <td>0.5796</td>
+                <td>0.5013</td>
+                <td>0.5102</td>
+              </tr>
+              <tr style="background: rgba(16, 185, 129, 0.08); font-weight: 700;">
+                <td style="color: #6ee7b7;">NIR Band Contribution (&Delta;)</td>
+                <td style="color: #6ee7b7;">+1 Band (NIR)</td>
+                <td style="color: #6ee7b7;">Empirical Physical Delta</td>
+                <td style="color: #6ee7b7;">+0.0426</td>
+                <td style="color: #6ee7b7;">+0.0381</td>
+                <td style="color: #6ee7b7;">+0.0769 (+15.3%)</td>
+                <td style="color: #6ee7b7;">+0.0768 (+18.1%)</td>
+                <td style="color: #6ee7b7;">-0.0052</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       6. LIMITATIONS & FAILURE CASES (HONEST NEGATIVE RESULTS)
+       ======================================================================== -->
+  <section id="limitations" class="page-section limitations-section">
+    <div class="container">
+      
+      <div class="section-header">
+        <div class="section-tag" style="color: #f87171;">Scientific Integrity &amp; Edge Cases</div>
+        <h2 class="section-title">Limitations &amp; Optical Failure Analysis</h2>
+        <p class="section-desc">
+          Honest accounting of physical optical ambiguities, false positive triggers under extreme atmospheric conditions, and proposed architectural mitigations.
+        </p>
+      </div>
+
+      <!-- Warning Callout Banner -->
+      <div class="limitations-banner">
+        <div class="limitations-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </div>
+        <div class="limitations-banner-text">
+          <h3>Transparent Negative Results Audit</h3>
+          <p>
+            While Ilādṛṣṭi demonstrates high accuracy across standard vegetative wildfire regimes, optical satellite systems 
+            suffer from physical photon scattering ambiguities where non-fire phenomena exhibit spectral signatures resembling carbonized ash.
+          </p>
+        </div>
+      </div>
+
+      <!-- Failure Analysis Breakdown Cards -->
+      <div class="failure-cases-grid">
+        
+        <!-- Case 1: Dense Cloud Cover -->
+        <div class="failure-card">
+          <div class="failure-card-header">
+            <div class="failure-card-title">1. Dense Clouds &amp; Edge Diffraction</div>
+            <span class="failure-badge">False Positive Commission</span>
+          </div>
+          <div class="failure-card-body">
+            <div class="failure-row">
+              <span class="failure-row-label">Physical Mechanism</span>
+              <p class="failure-row-desc">
+                High-albedo cloud tops reflect &gt;85% of visible and NIR solar radiation. 
+                At cloud edges, sharp dropoffs create extreme spatial gradients that convolutional filters occasionally mistake for fresh fire perimeters.
+              </p>
+            </div>
+            <div class="failure-row">
+              <span class="failure-row-label">Observed Impact</span>
+              <p class="failure-row-desc">
+                Fringe false alarm rings bordering thick stratocumulus banks (demonstrated in Scene <code>a1__07_13</code> with 13,269 FP pixels).
+              </p>
+            </div>
+            <div class="failure-mitigation">
+              <strong>Phase 3 Mitigation:</strong> Ingestion of Sentinel-2 Scene Classification Layer (SCL) to pre-mask cloud and cirrus pixels prior to inference.
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 2: Deep Topographic Shadows -->
+        <div class="failure-card">
+          <div class="failure-card-header">
+            <div class="failure-card-title">2. Deep Mountain Ravine Shadows</div>
+            <span class="failure-badge">Ash Spectral Mimicry</span>
+          </div>
+          <div class="failure-card-body">
+            <div class="failure-row">
+              <span class="failure-row-label">Physical Mechanism</span>
+              <p class="failure-row-desc">
+                Steep north-facing alpine ravines receive minimal direct solar irradiance. 
+                Low reflectance values (&lt;0.05 across RGB and NIR) deceptively mimic the flat, dark optical absorption profile of charcoal ash.
+              </p>
+            </div>
+            <div class="failure-row">
+              <span class="failure-row-label">Observed Impact</span>
+              <p class="failure-row-desc">
+                Localized false positive clusters in deep mountain gorges (demonstrated in Scene <code>k__4_6</code> with 7,211 FP pixels).
+              </p>
+            </div>
+            <div class="failure-mitigation">
+              <strong>Phase 3 Mitigation:</strong> Fusing Short-Wave Infrared (SWIR Band 12, 2190nm) and Digital Elevation Model (DEM) hillshading layers.
+            </div>
+          </div>
+        </div>
+
+        <!-- Case 3: Transient Grassland Burns -->
+        <div class="failure-card">
+          <div class="failure-card-header">
+            <div class="failure-card-title">3. Low-Biomass Grassland Scars</div>
+            <span class="failure-badge" style="background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.4); color: #fde68a;">
+              Transient Omission
+            </span>
+          </div>
+          <div class="failure-card-body">
+            <div class="failure-row">
+              <span class="failure-row-label">Physical Mechanism</span>
+              <p class="failure-row-desc">
+                Fast-moving savanna grass fires leave only ephemeral surface soot without deep canopy destruction. 
+                Wind rapidly scatters the light ash layer within 48 hours, causing spectral signatures to revert before satellite revisit.
+              </p>
+            </div>
+            <div class="failure-row">
+              <span class="failure-row-label">Observed Impact</span>
+              <p class="failure-row-desc">
+                Under-segmentation (False Negatives) for thin pasture fires compared to dense coniferous forest burns.
+              </p>
+            </div>
+            <div class="failure-mitigation">
+              <strong>Phase 3 Mitigation:</strong> Bi-temporal Sentinel-2 pre/post difference mapping (dNBR) to detect transient vegetative biomass shifts.
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Failure Case Side-by-Side Visual Showcase -->
+      <div class="failure-viewer-card glass-panel">
+        <h4 style="font-size: 1.15rem; font-weight: 800; color: #f8fafc; margin-bottom: 0.5rem;">
+          Empirical Failure Showcase: Cloud Boundary &amp; Shadow False Positives
+        </h4>
+        <p style="font-size: 0.88rem; color: var(--text-secondary);">
+          Direct inspection of actual test samples where optical limitations triggered false alarms:
+        </p>
+
+        <div class="failure-viewer-grid">
+          <div class="failure-tile">
+            <img src="assets/samples/failure_cloud_rgb.png" alt="Cloud Tile Sentinel-2 RGB" />
+            <span class="failure-tile-caption">1. Sentinel-2 RGB (Cloud Scene a1__07_13)</span>
+          </div>
+          <div class="failure-tile">
+            <img src="assets/samples/failure_cloud_overlay.png" alt="Prediction Overlay on Cloud Scene" />
+            <span class="failure-tile-caption">2. False Alarms along Cloud Margin (Red Overlay)</span>
+          </div>
+          <div class="failure-tile">
+            <img src="assets/samples/failure_cloud_confusion.png" alt="Spatial Confusion Map" />
+            <span class="failure-tile-caption">3. Spatial Confusion Map (Red = False Positive Commission)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================
+       7. FOOTER & REPRODUCIBILITY SPECS
+       ======================================================================== -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-content">
+        
+        <div class="footer-brand">
+          <div class="brand-title" style="font-size: 1.4rem;">
+            Ilādṛṣṭi <span class="brand-sanskrit">इलादृष्टि</span>
+          </div>
+          <p>
+            Multispectral Semantic Segmentation for Wildfire Progression.<br />
+            Developed for <strong>Track 6: AI for Science &amp; Society</strong> at the Deep Learning Hackathon, Amrita Vishwa Vidyapeetham.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <span class="pill-badge seed">PyTorch 2.0+</span>
+          <span class="pill-badge track">Seed 42 Deterministic</span>
+          <span class="pill-badge success">ESA Copernicus Open Data</span>
+          <a href="https://github.com/flykrth/iladrsti" target="_blank" rel="noopener noreferrer" class="btn btn-glass" style="padding: 0.45rem 1rem; font-size: 0.82rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+            </svg>
+            GitHub Repository
+          </a>
+        </div>
+
+      </div>
+
+      <div class="footer-bottom">
+        <div>
+          &copy; 2026 Ilādṛṣṭi Earth Observation Project. Released under the MIT License.
+        </div>
+        <div>
+          Architecture: Transfer-Adapted ResNet-50 U-Net &bull; Latency: 36.4 FPS &bull; Resolution: 10m GSD
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/slider.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

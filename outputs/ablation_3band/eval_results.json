@@ -1,0 +1,10 @@
+{
+  "checkpoint": "checkpoints/ablation_rgb_3band.pt",
+  "in_channels": 3,
+  "loss_function": "FOCAL_TVERSKY",
+  "test_samples": 40,
+  "threshold": 0.5,
+  "test_loss": 0.5154056936502457,
+  "test_dice": 0.5026851058006286,
+  "test_iou": 0.42454607486724855
+}

@@ -4,13 +4,41 @@
     "architecture": "Standard U-Net",
     "backbone": "ResNet-50 (Pretrained)",
     "in_channels": 4,
-    "loss_function": "BCEWithLogitsLoss",
+    "loss_function": "BCE",
     "val_dice": 0.6924,
     "val_iou": 0.61,
     "test_loss": 0.3781,
     "test_dice": 0.7834,
     "test_iou": 0.7044,
     "seed": 42,
-    "notes": "Mandatory comparison floor (Seed locked 42)"
+    "notes": "Evaluation on held-out test split (Seed locked 42)"
+  },
+  {
+    "experiment_name": "Ablation RGB (3-band)",
+    "architecture": "Standard U-Net",
+    "backbone": "ResNet-50 (Pretrained)",
+    "in_channels": 3,
+    "loss_function": "FOCAL_TVERSKY",
+    "val_dice": 0.4414,
+    "val_iou": 0.3653,
+    "test_loss": 0.5154,
+    "test_dice": 0.5027,
+    "test_iou": 0.4245,
+    "seed": 42,
+    "notes": "Evaluation on held-out test split (Seed locked 42)"
+  },
+  {
+    "experiment_name": "Ablation RGB+NIR (4-band)",
+    "architecture": "Standard U-Net",
+    "backbone": "ResNet-50 (Pretrained)",
+    "in_channels": 4,
+    "loss_function": "FOCAL_TVERSKY",
+    "val_dice": 0.484,
+    "val_iou": 0.4034,
+    "test_loss": 0.5102,
+    "test_dice": 0.5796,
+    "test_iou": 0.5013,
+    "seed": 42,
+    "notes": "Evaluation on held-out test split (Seed locked 42)"
   }
 ]

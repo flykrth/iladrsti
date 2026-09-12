@@ -1,0 +1,184 @@
+[
+  {
+    "id": "scene1",
+    "name": "Mega-Fire Scar Complex",
+    "tile_filename": "b__06_06.tif",
+    "location": "Boreal Pine Forest, Northern Mediterranean",
+    "description": "Massive contiguous wildfire scar (>46,000 pixels burned) displaying near-perfect contour delineation and high model confidence.",
+    "type": "standard",
+    "badge": "Dice: 0.9317 (Benchmark Top)",
+    "metrics": {
+      "dice": 0.9317,
+      "iou": 0.8747,
+      "precision": 0.9528,
+      "recall": 0.9234,
+      "scar_area_pct": 74.02,
+      "scar_pixels": 48507,
+      "gt_pixels": 50053,
+      "tp": 46217,
+      "fp": 2290,
+      "fn": 3836,
+      "tn": 13193
+    },
+    "assets": {
+      "rgb": "assets/samples/scene1_rgb.png",
+      "nir": "assets/samples/scene1_nir.png",
+      "pred": "assets/samples/scene1_pred.png",
+      "gt": "assets/samples/scene1_gt.png",
+      "overlay": "assets/samples/scene1_overlay.png",
+      "confusion": "assets/samples/scene1_confusion.png"
+    }
+  },
+  {
+    "id": "scene2",
+    "name": "Smoke-Penetrated Active Front",
+    "tile_filename": "a1__02_04.tif",
+    "location": "Sierra Nevada Foothills, Mixed Conifer",
+    "description": "Active firefront with dense atmospheric pyrocumulonimbus smoke. The 4th Near-Infrared band penetrates haze where visible RGB fails.",
+    "type": "standard",
+    "badge": "NIR Smoke Penetration",
+    "metrics": {
+      "dice": 0.8283,
+      "iou": 0.7248,
+      "precision": 0.9611,
+      "recall": 0.7859,
+      "scar_area_pct": 50.26,
+      "scar_pixels": 32941,
+      "gt_pixels": 40286,
+      "tp": 31659,
+      "fp": 1282,
+      "fn": 8627,
+      "tn": 23968
+    },
+    "assets": {
+      "rgb": "assets/samples/scene2_rgb.png",
+      "nir": "assets/samples/scene2_nir.png",
+      "pred": "assets/samples/scene2_pred.png",
+      "gt": "assets/samples/scene2_gt.png",
+      "overlay": "assets/samples/scene2_overlay.png",
+      "confusion": "assets/samples/scene2_confusion.png"
+    }
+  },
+  {
+    "id": "scene3",
+    "name": "Canopy Crown Fire & Ridge",
+    "tile_filename": "m1__2_5.tif",
+    "location": "Mountain Ridge Basin, Dense Woodland",
+    "description": "Severe canopy burn with irregular topography. Sharp delineation along ridge barriers and preserved unburnt green enclaves.",
+    "type": "standard",
+    "badge": "Dice: 0.9230 (Precision Delineation)",
+    "metrics": {
+      "dice": 0.923,
+      "iou": 0.8602,
+      "precision": 0.9607,
+      "recall": 0.8954,
+      "scar_area_pct": 57.59,
+      "scar_pixels": 37743,
+      "gt_pixels": 40496,
+      "tp": 36259,
+      "fp": 1484,
+      "fn": 4237,
+      "tn": 23556
+    },
+    "assets": {
+      "rgb": "assets/samples/scene3_rgb.png",
+      "nir": "assets/samples/scene3_nir.png",
+      "pred": "assets/samples/scene3_pred.png",
+      "gt": "assets/samples/scene3_gt.png",
+      "overlay": "assets/samples/scene3_overlay.png",
+      "confusion": "assets/samples/scene3_confusion.png"
+    }
+  },
+  {
+    "id": "scene4",
+    "name": "Fragmented Spot Fires & Mosaics",
+    "tile_filename": "a2__5_3.tif",
+    "location": "Semi-Arid Scrub & Agricultural Interface",
+    "description": "Discontinuous burn mosaic across variable vegetative fuels demonstrating high sensitivity to fine boundary perimeters.",
+    "type": "standard",
+    "badge": "Discontinuous Mosaic",
+    "metrics": {
+      "dice": 0.808,
+      "iou": 0.7053,
+      "precision": 0.8069,
+      "recall": 0.8715,
+      "scar_area_pct": 46.37,
+      "scar_pixels": 30390,
+      "gt_pixels": 28138,
+      "tp": 24521,
+      "fp": 5869,
+      "fn": 3617,
+      "tn": 31529
+    },
+    "assets": {
+      "rgb": "assets/samples/scene4_rgb.png",
+      "nir": "assets/samples/scene4_nir.png",
+      "pred": "assets/samples/scene4_pred.png",
+      "gt": "assets/samples/scene4_gt.png",
+      "overlay": "assets/samples/scene4_overlay.png",
+      "confusion": "assets/samples/scene4_confusion.png"
+    }
+  },
+  {
+    "id": "failure_cloud",
+    "name": "Failure Case: Cloud Cover & Edge Diffraction",
+    "tile_filename": "a1__07_13.tif",
+    "location": "Coastal Range with Low Marine Stratocumulus",
+    "description": "Optical limitation: Saturated cloud albedo creates high contrast edges against dark terrain, triggering false positive boundary detections.",
+    "type": "failure",
+    "badge": "False Positive Commission (Clouds)",
+    "analysis": "High cloud reflectance saturates visible and NIR detectors. The steep gradient at cloud margins mimics charcoal ash dropoffs, resulting in 13,269 false positive pixels. Mitigation: Scene Classification Layer (SCL) cloud masking.",
+    "metrics": {
+      "dice": 0.6341,
+      "iou": 0.4947,
+      "precision": 0.4959,
+      "recall": 0.9067,
+      "scar_area_pct": 40.16,
+      "scar_pixels": 26321,
+      "gt_pixels": 14395,
+      "tp": 13052,
+      "fp": 13269,
+      "fn": 1343,
+      "tn": 37872
+    },
+    "assets": {
+      "rgb": "assets/samples/failure_cloud_rgb.png",
+      "nir": "assets/samples/failure_cloud_nir.png",
+      "pred": "assets/samples/failure_cloud_pred.png",
+      "gt": "assets/samples/failure_cloud_gt.png",
+      "overlay": "assets/samples/failure_cloud_overlay.png",
+      "confusion": "assets/samples/failure_cloud_confusion.png"
+    }
+  },
+  {
+    "id": "failure_shadow",
+    "name": "Failure Case: Deep Topographic Ravine Shadow",
+    "tile_filename": "k__4_6.tif",
+    "location": "Steep Alpine Gorge & North-Facing Ravines",
+    "description": "Optical limitation: Steep topographic shadows receive minimal solar irradiance, mimicking the low reflectance signature of charcoal ash.",
+    "type": "failure",
+    "badge": "False Positive Commission (Shadows)",
+    "analysis": "Near-zero solar illumination in deep gorges drops visible and NIR reflectance below 0.05, deceiving the CNN into predicting burned ground (7,211 false positive pixels). Mitigation: Integrating SWIR Band 11/12 (NBR) and DEM elevation hillshading.",
+    "metrics": {
+      "dice": 0.3249,
+      "iou": 0.2266,
+      "precision": 0.3543,
+      "recall": 0.452,
+      "scar_area_pct": 17.04,
+      "scar_pixels": 11168,
+      "gt_pixels": 8754,
+      "tp": 3957,
+      "fp": 7211,
+      "fn": 4797,
+      "tn": 49571
+    },
+    "assets": {
+      "rgb": "assets/samples/failure_shadow_rgb.png",
+      "nir": "assets/samples/failure_shadow_nir.png",
+      "pred": "assets/samples/failure_shadow_pred.png",
+      "gt": "assets/samples/failure_shadow_gt.png",
+      "overlay": "assets/samples/failure_shadow_overlay.png",
+      "confusion": "assets/samples/failure_shadow_confusion.png"
+    }
+  }
+]

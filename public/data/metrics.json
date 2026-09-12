@@ -1,0 +1,430 @@
+{
+  "project": {
+    "name": "Il\u0101d\u1e5b\u1e63\u1e6di",
+    "sanskritName": "\u0907\u0932\u093e\u0926\u0943\u0937\u094d\u091f\u093f",
+    "etymology": "\u0907\u0932\u093e (Earth) + \u0926\u0943\u0937\u094d\u091f\u093f (Vision)",
+    "subtitle": "Multispectral Semantic Segmentation for Wildfire Progression",
+    "track": "Track 6: AI for Science & Society",
+    "hackathon": "Deep Learning Hackathon @ Amrita Vishwa Vidyapeetham",
+    "seed": 42,
+    "device": "NVIDIA RTX 4050 Edge GPU",
+    "throughput": "36.4 FPS",
+    "fullTileLatency": "< 50 seconds (10980x10980 Sentinel-2)",
+    "bands": "4 Bands (B04 Red, B03 Green, B02 Blue, B08 NIR)",
+    "resolution": "10m GSD (Ground Sample Distance)",
+    "weights": "ImageNet Pretrained ResNet-50 + 4-Band Conv1 Adaptation"
+  },
+  "evaluationResults": {
+    "checkpoint": "checkpoints/best_baseline_model_fp16.pt",
+    "in_channels": 4,
+    "loss_function": "BCE",
+    "test_samples": 40,
+    "threshold": 0.5,
+    "test_loss": 0.3781237483024597,
+    "test_dice": 0.7834155797958374,
+    "test_iou": 0.7044492602348328
+  },
+  "benchmarks": [
+    {
+      "id": "baseline",
+      "name": "Mandatory Baseline",
+      "bands": "4-Band (RGB + NIR)",
+      "loss": "BCEWithLogitsLoss",
+      "valDice": 0.6924,
+      "valIoU": 0.61,
+      "testDice": 0.7834,
+      "testIoU": 0.7044,
+      "testLoss": 0.3781,
+      "peakEpoch": 5,
+      "isBaseline": true,
+      "badge": "Mandatory Baseline Winner"
+    },
+    {
+      "id": "ablation_rgb",
+      "name": "Ablation RGB (3-band)",
+      "bands": "3-Band (RGB-Only)",
+      "loss": "Focal-Tversky Loss (\u03b1=0.7, \u03b2=0.3, \u03b3=1.333)",
+      "valDice": 0.4414,
+      "valIoU": 0.3653,
+      "testDice": 0.5027,
+      "testIoU": 0.4245,
+      "testLoss": 0.5154,
+      "peakEpoch": 12,
+      "isBaseline": false,
+      "badge": "3-Band RGB Control"
+    },
+    {
+      "id": "ablation_rgbnir",
+      "name": "Ablation RGB+NIR (4-band)",
+      "bands": "4-Band (RGB + NIR)",
+      "loss": "Focal-Tversky Loss (\u03b1=0.7, \u03b2=0.3, \u03b3=1.333)",
+      "valDice": 0.484,
+      "valIoU": 0.4034,
+      "testDice": 0.5796,
+      "testIoU": 0.5013,
+      "testLoss": 0.5102,
+      "peakEpoch": 15,
+      "isBaseline": false,
+      "badge": "4-Band Spectral Boost"
+    }
+  ],
+  "spectralGain": {
+    "diceDelta": "+0.0769",
+    "dicePct": "+15.3%",
+    "iouDelta": "+0.0768",
+    "iouPct": "+18.1%",
+    "lossDelta": "-0.0052",
+    "contribution": "NIR (Band 8, 842nm) penetrates particulate pyrocumulonimbus haze and detects sudden mesophyll chlorophyll collapse where visible RGB scatters."
+  },
+  "trainingHistory": [
+    {
+      "epoch": 1,
+      "trainLoss": 0.5488,
+      "trainDice": 0.4698,
+      "trainIoU": 0.386,
+      "valLoss": 0.6584,
+      "valDice": 0.2157,
+      "valIoU": 0.1421,
+      "isBest": false
+    },
+    {
+      "epoch": 2,
+      "trainLoss": 0.4466,
+      "trainDice": 0.6321,
+      "trainIoU": 0.5482,
+      "valLoss": 0.488,
+      "valDice": 0.3783,
+      "valIoU": 0.2987,
+      "isBest": false
+    },
+    {
+      "epoch": 3,
+      "trainLoss": 0.4281,
+      "trainDice": 0.5896,
+      "trainIoU": 0.5062,
+      "valLoss": 0.4282,
+      "valDice": 0.5177,
+      "valIoU": 0.434,
+      "isBest": false
+    },
+    {
+      "epoch": 4,
+      "trainLoss": 0.3944,
+      "trainDice": 0.6375,
+      "trainIoU": 0.5591,
+      "valLoss": 0.3941,
+      "valDice": 0.6749,
+      "valIoU": 0.5943,
+      "isBest": false
+    },
+    {
+      "epoch": 5,
+      "trainLoss": 0.3895,
+      "trainDice": 0.6366,
+      "trainIoU": 0.5575,
+      "valLoss": 0.3598,
+      "valDice": 0.6924,
+      "valIoU": 0.61,
+      "isBest": true
+    },
+    {
+      "epoch": 6,
+      "trainLoss": 0.3707,
+      "trainDice": 0.6848,
+      "trainIoU": 0.6089,
+      "valLoss": 0.3604,
+      "valDice": 0.6894,
+      "valIoU": 0.6091,
+      "isBest": false
+    },
+    {
+      "epoch": 7,
+      "trainLoss": 0.3567,
+      "trainDice": 0.6617,
+      "trainIoU": 0.5854,
+      "valLoss": 0.4002,
+      "valDice": 0.6004,
+      "valIoU": 0.5201,
+      "isBest": false
+    },
+    {
+      "epoch": 8,
+      "trainLoss": 0.3437,
+      "trainDice": 0.7393,
+      "trainIoU": 0.6616,
+      "valLoss": 0.3468,
+      "valDice": 0.6878,
+      "valIoU": 0.6113,
+      "isBest": false
+    },
+    {
+      "epoch": 9,
+      "trainLoss": 0.3434,
+      "trainDice": 0.7189,
+      "trainIoU": 0.6425,
+      "valLoss": 0.344,
+      "valDice": 0.6613,
+      "valIoU": 0.5837,
+      "isBest": false
+    },
+    {
+      "epoch": 10,
+      "trainLoss": 0.3294,
+      "trainDice": 0.712,
+      "trainIoU": 0.6399,
+      "valLoss": 0.3383,
+      "valDice": 0.6829,
+      "valIoU": 0.6061,
+      "isBest": false
+    },
+    {
+      "epoch": 11,
+      "trainLoss": 0.3275,
+      "trainDice": 0.7227,
+      "trainIoU": 0.649,
+      "valLoss": 0.3297,
+      "valDice": 0.6593,
+      "valIoU": 0.5859,
+      "isBest": false
+    },
+    {
+      "epoch": 12,
+      "trainLoss": 0.3231,
+      "trainDice": 0.7254,
+      "trainIoU": 0.6513,
+      "valLoss": 0.331,
+      "valDice": 0.6516,
+      "valIoU": 0.5772,
+      "isBest": false
+    },
+    {
+      "epoch": 13,
+      "trainLoss": 0.3264,
+      "trainDice": 0.703,
+      "trainIoU": 0.6282,
+      "valLoss": 0.3341,
+      "valDice": 0.6494,
+      "valIoU": 0.5727,
+      "isBest": false
+    },
+    {
+      "epoch": 14,
+      "trainLoss": 0.3193,
+      "trainDice": 0.7358,
+      "trainIoU": 0.6624,
+      "valLoss": 0.33,
+      "valDice": 0.6583,
+      "valIoU": 0.5858,
+      "isBest": false
+    },
+    {
+      "epoch": 15,
+      "trainLoss": 0.3203,
+      "trainDice": 0.7282,
+      "trainIoU": 0.6539,
+      "valLoss": 0.3315,
+      "valDice": 0.6595,
+      "valIoU": 0.5862,
+      "isBest": false
+    }
+  ],
+  "scenes": [
+    {
+      "id": "scene1",
+      "name": "Mega-Fire Scar Complex",
+      "tile": "b__06_06.tif",
+      "category": "benchmark",
+      "location": "Boreal Pine Forest, Northern Mediterranean",
+      "description": "Massive contiguous wildfire scar (>46,000 pixels burned) displaying near-perfect contour delineation and high model confidence.",
+      "metrics": {
+        "dice": 0.9317,
+        "iou": 0.8747,
+        "precision": 0.9528,
+        "recall": 0.9234,
+        "scarAreaPct": 74.02,
+        "scarPixels": 48507,
+        "gtPixels": 50053,
+        "tp": 46217,
+        "fp": 2290,
+        "fn": 3836,
+        "tn": 13193
+      },
+      "assets": {
+        "rgb": "/assets/demo/scene1_rgb.png",
+        "nir": "/assets/demo/scene1_nir.png",
+        "pred": "/assets/demo/scene1_pred.png",
+        "gt": "/assets/demo/scene1_gt.png",
+        "overlay": "/assets/demo/scene1_overlay.png",
+        "confusion": "/assets/demo/scene1_confusion.png"
+      }
+    },
+    {
+      "id": "scene2",
+      "name": "Smoke-Penetrated Active Front",
+      "tile": "a1__02_04.tif",
+      "category": "penetration",
+      "location": "Sierra Nevada Foothills, Mixed Conifer",
+      "description": "Active firefront with dense atmospheric pyrocumulonimbus smoke. The 4th Near-Infrared band penetrates haze where visible RGB fails.",
+      "metrics": {
+        "dice": 0.8283,
+        "iou": 0.7248,
+        "precision": 0.9611,
+        "recall": 0.7859,
+        "scarAreaPct": 50.26,
+        "scarPixels": 32941,
+        "gtPixels": 40286,
+        "tp": 31659,
+        "fp": 1282,
+        "fn": 8627,
+        "tn": 23968
+      },
+      "assets": {
+        "rgb": "/assets/demo/scene2_rgb.png",
+        "nir": "/assets/demo/scene2_nir.png",
+        "pred": "/assets/demo/scene2_pred.png",
+        "gt": "/assets/demo/scene2_gt.png",
+        "overlay": "/assets/demo/scene2_overlay.png",
+        "confusion": "/assets/demo/scene2_confusion.png"
+      }
+    },
+    {
+      "id": "scene3",
+      "name": "Canopy Crown Fire & Ridge",
+      "tile": "m1__2_5.tif",
+      "category": "topography",
+      "location": "Mountain Ridge Basin, Dense Woodland",
+      "description": "Severe canopy burn with irregular topography. Sharp delineation along ridge barriers and preserved unburnt green enclaves.",
+      "metrics": {
+        "dice": 0.923,
+        "iou": 0.8602,
+        "precision": 0.9607,
+        "recall": 0.8954,
+        "scarAreaPct": 57.59,
+        "scarPixels": 37743,
+        "gtPixels": 40496,
+        "tp": 36259,
+        "fp": 1484,
+        "fn": 4237,
+        "tn": 23556
+      },
+      "assets": {
+        "rgb": "/assets/demo/scene3_rgb.png",
+        "nir": "/assets/demo/scene3_nir.png",
+        "pred": "/assets/demo/scene3_pred.png",
+        "gt": "/assets/demo/scene3_gt.png",
+        "overlay": "/assets/demo/scene3_overlay.png",
+        "confusion": "/assets/demo/scene3_confusion.png"
+      }
+    },
+    {
+      "id": "scene4",
+      "name": "Fragmented Spot Fires & Mosaics",
+      "tile": "a2__5_3.tif",
+      "category": "mosaic",
+      "location": "Semi-Arid Scrub & Agricultural Interface",
+      "description": "Discontinuous burn mosaic across variable vegetative fuels demonstrating high sensitivity to fine boundary perimeters.",
+      "metrics": {
+        "dice": 0.808,
+        "iou": 0.7053,
+        "precision": 0.8069,
+        "recall": 0.8715,
+        "scarAreaPct": 46.37,
+        "scarPixels": 30390,
+        "gtPixels": 28138,
+        "tp": 24521,
+        "fp": 5869,
+        "fn": 3617,
+        "tn": 31529
+      },
+      "assets": {
+        "rgb": "/assets/demo/scene4_rgb.png",
+        "nir": "/assets/demo/scene4_nir.png",
+        "pred": "/assets/demo/scene4_pred.png",
+        "gt": "/assets/demo/scene4_gt.png",
+        "overlay": "/assets/demo/scene4_overlay.png",
+        "confusion": "/assets/demo/scene4_confusion.png"
+      }
+    },
+    {
+      "id": "failure_cloud",
+      "name": "Failure Case: Cloud Cover & Edge Diffraction",
+      "tile": "a1__07_13.tif",
+      "category": "failure",
+      "location": "Coastal Range with Low Marine Stratocumulus",
+      "description": "Optical limitation: Saturated cloud albedo creates high contrast edges against dark terrain, triggering false positive boundary detections.",
+      "metrics": {
+        "dice": 0.6341,
+        "iou": 0.4947,
+        "precision": 0.4959,
+        "recall": 0.9067,
+        "scarAreaPct": 40.16,
+        "scarPixels": 26321,
+        "gtPixels": 14395,
+        "tp": 13052,
+        "fp": 13269,
+        "fn": 1343,
+        "tn": 37872
+      },
+      "assets": {
+        "rgb": "/assets/demo/failure_cloud_rgb.png",
+        "nir": "/assets/demo/failure_cloud_nir.png",
+        "pred": "/assets/demo/failure_cloud_pred.png",
+        "gt": "/assets/demo/failure_cloud_gt.png",
+        "overlay": "/assets/demo/failure_cloud_overlay.png",
+        "confusion": "/assets/demo/failure_cloud_confusion.png"
+      }
+    },
+    {
+      "id": "failure_shadow",
+      "name": "Failure Case: Deep Topographic Ravine Shadow",
+      "tile": "k__4_6.tif",
+      "category": "failure",
+      "location": "Steep Alpine Gorge & North-Facing Ravines",
+      "description": "Optical limitation: Steep topographic shadows receive minimal solar irradiance, mimicking the low reflectance signature of charcoal ash.",
+      "metrics": {
+        "dice": 0.3249,
+        "iou": 0.2266,
+        "precision": 0.3543,
+        "recall": 0.452,
+        "scarAreaPct": 17.04,
+        "scarPixels": 11168,
+        "gtPixels": 8754,
+        "tp": 3957,
+        "fp": 7211,
+        "fn": 4797,
+        "tn": 49571
+      },
+      "assets": {
+        "rgb": "/assets/demo/failure_shadow_rgb.png",
+        "nir": "/assets/demo/failure_shadow_nir.png",
+        "pred": "/assets/demo/failure_shadow_pred.png",
+        "gt": "/assets/demo/failure_shadow_gt.png",
+        "overlay": "/assets/demo/failure_shadow_overlay.png",
+        "confusion": "/assets/demo/failure_shadow_confusion.png"
+      }
+    }
+  ],
+  "failures": [
+    {
+      "title": "Dense Cloud Cover & Fringe Scattering",
+      "severity": "Moderate",
+      "opticalMechanism": "Thick cumulus and cirrus cloud tops reflect >85% of incoming visible and NIR radiation. At cloud perimeters, rapid light attenuation creates a steep spatial gradient that the convolutional kernels occasionally misinterpret as fresh charcoal boundaries.",
+      "falsePositiveImpact": "Commission errors along cloud margins (+13,269 pixels in extreme scene a1__07_13).",
+      "mitigation": "Ingesting ESA Copernicus Scene Classification Layer (SCL) cloud masks and pre-filtering saturated pixels (Reflectance > 0.85)."
+    },
+    {
+      "title": "Deep Topographic Shadows & North-Facing Ravines",
+      "severity": "High in Alpine Terrain",
+      "opticalMechanism": "Steep gorges and relief slopes with high solar zenith angles receive negligible direct beam irradiance. Low diffuse skylight yields raw Digital Numbers (< 500 DN, < 0.05 reflectance), creating a flat dark spectral curve indistinguishable from charred biomass in optical bands.",
+      "falsePositiveImpact": "Localized false alarms clustered in steep valley bottoms.",
+      "mitigation": "DEM-derived hillshade terrain normalization and integrating Short-Wave Infrared (SWIR Band 12, 2190nm), which exhibits distinct soil-rock ratios compared to vegetative ash."
+    },
+    {
+      "title": "Low-Biomass Fast-Moving Grassland Fires",
+      "severity": "Low to Moderate",
+      "opticalMechanism": "Rapid fire spread in dry savanna leaves fragile, thin surface soot without destroying woody crown structure. Wind rapidly disperses light ash, causing rapid spectral reversion to unburned soil signatures.",
+      "falsePositiveImpact": "Omission errors (False Negatives) where fire scars fade rapidly within 48-72 hours.",
+      "mitigation": "Bi-temporal Sentinel-2 pre-fire vs post-fire differencing (dNBR) to detect transient vegetative biomass reduction."
+    }
+  ]
+}

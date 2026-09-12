@@ -242,22 +242,73 @@ python evaluate.py --data_dir data --checkpoint checkpoints/best_baseline_model_
 
 ---
 
-## 9. Ablation Study Roadmap
+## 9. Phase 2: Optimization and Ablation
 
-With the mandatory baseline established and verified, the following ablation experiments are prepared:
+### Focal-Tversky Loss Optimization
+The Focal-Tversky Loss ($FTL$) handles severe spatial class imbalance by penalizing False Negatives ($\alpha$) and focusing on hard boundary pixels ($\gamma$):
+$$TI = \frac{TP + \epsilon}{TP + \alpha FN + \beta FP + \epsilon}, \quad FTL = (1 - TI)^\gamma$$
 
-1. **Spectral Ablation (3-Band RGB vs 4-Band RGB+NIR)**:
-   Quantify the empirical contribution of Near-Infrared surface reflectance in penetrating smoke plumes and differentiating active fire scars.
-   ```bash
-   python train.py --in_channels 3 --epochs 15
-   ```
-2. **Loss Function Ablation**:
-   Benchmark BCE against Dice Loss, Focal Loss, and Compound Combo Loss ($\mathcal{L}_{\text{BCE}} + \mathcal{L}_{\text{Dice}}$) to address severe foreground/background spatial imbalance.
-3. **Architectural Backbone Ablation**:
-   Compare ResNet-50 against EfficientNet-B4 and SegFormer/MiT-B2 encoders.
+Train with Focal-Tversky Loss:
+```bash
+python train_optimization.py \
+    --data_dir data \
+    --epochs 20 \
+    --batch_size 16 \
+    --lr 1e-4 \
+    --in_channels 4 \
+    --loss focal_tversky \
+    --alpha 0.7 \
+    --beta 0.3 \
+    --gamma 1.333
+```
+
+### Automated Spectral Ablation Study (`ablation.sh`)
+Execute isolated, reproducible ($seed=42$) training and test evaluations comparing **3-Band (RGB-only)** against **4-Band (RGB+NIR)**:
+```bash
+chmod +x ablation.sh
+./ablation.sh 15 16 1e-4 data focal_tversky
+```
+
+### Visual Dashboard & Video Demo Generation (`generate_demo.py`)
+Generate 5-panel side-by-side visual dashboards (Original RGB, False-Color Infrared, Ground Truth, Predicted Probability Mask, and TP/FP/FN Error Overlays), plus an MP4 video and animated GIF demo:
+```bash
+python generate_demo.py \
+    --checkpoint checkpoints/best_baseline_model_fp16.pt \
+    --split test \
+    --num_samples 12 \
+    --save_video \
+    --fps 2
+```
+
+---
+
+## 10. Next.js Demonstration Dashboard & Vercel Deployment
+
+The project includes an interactive, production-ready Next.js (App Router) demonstration dashboard featuring animated Glassmorphism, before/after multispectral image split slider, interactive Recharts telemetry, and optical failure analysis.
+
+### Local Development
+```bash
+npm install
+npm run dev
+# Dashboard available at http://localhost:3000
+```
+
+### Production Build & Linting
+```bash
+npm run lint
+npm run build
+npm run start
+```
+
+### Vercel Deployment
+Configured out-of-the-box via `vercel.json` with optimized static data caching:
+```bash
+npx vercel
+```
 
 ---
 
 ## Citation & Acknowledgments
 * Deep Learning Hackathon — Track 6: AI for Science & Society, Amrita Vishwa Vidyapeetham.
 * European Space Agency (ESA) Copernicus Sentinel-2 Open Access Data.
+

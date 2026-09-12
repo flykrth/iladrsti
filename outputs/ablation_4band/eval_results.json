@@ -1,0 +1,10 @@
+{
+  "checkpoint": "checkpoints/ablation_rgbnir_4band.pt",
+  "in_channels": 4,
+  "loss_function": "FOCAL_TVERSKY",
+  "test_samples": 40,
+  "threshold": 0.5,
+  "test_loss": 0.5101685941219329,
+  "test_dice": 0.5795817494392395,
+  "test_iou": 0.5012855529785156
+}

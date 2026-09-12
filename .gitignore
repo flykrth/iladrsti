@@ -17,7 +17,8 @@ __pycache__/
 
 # Large Checkpoints (Hosted on GitHub Releases)
 # The full 503MB checkpoint with optimizer states is hosted on GitHub Releases v1.0.0-baseline
-checkpoints/best_baseline_model.pt
+checkpoints/*.pt
+!checkpoints/best_baseline_model_fp16.pt
 
 # Raw duplicate un-split data (Split data in data/train, data/val, data/test is preserved)
 data/raw/
@@ -25,3 +26,11 @@ data/processed/
 
 # Logs
 *.log
+
+# Next.js and Node
+node_modules/
+.next/
+out/
+build/
+.vercel
+

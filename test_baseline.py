@@ -116,15 +116,42 @@ def test_dataloaders():
     print(f"  -> Passed: DataLoaders produce batch shape {batch_img.shape} and {batch_msk.shape}.")
 
 
+def test_focal_tversky_loss():
+    print("[Test 6/6] Testing Focal-Tversky Loss formulation and gradients...")
+    from src.utils.losses import FocalTverskyLoss, get_loss
+
+    ftl = FocalTverskyLoss(alpha=0.7, beta=0.3, gamma=1.333)
+
+    # Perfect prediction test
+    targets = torch.tensor([[[[1.0, 1.0], [0.0, 0.0]]]])
+    perfect_logits = torch.tensor([[[[10.0, 10.0], [-10.0, -10.0]]]])
+    loss_perf = ftl(perfect_logits, targets)
+    assert loss_perf.item() < 1e-3, f"Expected loss near 0, got {loss_perf.item()}"
+
+    # Gradient propagation test
+    inputs = torch.randn(2, 1, 32, 32, requires_grad=True)
+    rand_targets = torch.randint(0, 2, (2, 1, 32, 32)).float()
+    loss = ftl(inputs, rand_targets)
+    loss.backward()
+    assert inputs.grad is not None and not torch.isnan(inputs.grad).any()
+
+    # Factory test
+    loss_fn = get_loss("focal_tversky", alpha=0.7, beta=0.3, gamma=1.333)
+    assert isinstance(loss_fn, FocalTverskyLoss)
+    print("  -> Passed: Focal-Tversky Loss math, backward pass, and factory verified.")
+
+
 if __name__ == "__main__":
     print("==================================================")
-    print(" Running Ilādṛṣṭi Baseline Test Suite")
+    print(" Running Ilādṛṣṭi Test Suite (Baseline + Phase 2)")
     print("==================================================")
     test_seed_determinism()
     test_metrics()
     test_dataset_loading()
     test_model_forward()
     test_dataloaders()
+    test_focal_tversky_loss()
     print("==================================================")
     print(" ALL TESTS PASSED SUCCESSFULLY! ")
     print("==================================================")
+
